@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{49DFB2A4-6009-489F-9B6A-81D82A6212F0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Dentistry_clinic</RootNamespace>
+    <AssemblyName>Dentistry clinic</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logocircle.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Views\FormAutorization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormAutorization.Designer.cs">
+      <DependentUpon>FormAutorization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormNavigation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormNavigation.Designer.cs">
+      <DependentUpon>FormNavigation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormAppointment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormAppointment.Designer.cs">
+      <DependentUpon>FormAppointment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormCreateAppointment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormCreateAppointment.Designer.cs">
+      <DependentUpon>FormCreateAppointment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormManagePassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormManagePassword.Designer.cs">
+      <DependentUpon>FormManagePassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormUserCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormUserCard.Designer.cs">
+      <DependentUpon>FormUserCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormUsers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormUsers.Designer.cs">
+      <DependentUpon>FormUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormPattern.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormPattern.Designer.cs">
+      <DependentUpon>FormPattern.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Views\FormAutorization.resx">
+      <DependentUpon>FormAutorization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormNavigation.resx">
+      <DependentUpon>FormNavigation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormAppointment.resx">
+      <DependentUpon>FormAppointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormCreateAppointment.resx">
+      <DependentUpon>FormCreateAppointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormManagePassword.resx">
+      <DependentUpon>FormManagePassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormUserCard.resx">
+      <DependentUpon>FormUserCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormUsers.resx">
+      <DependentUpon>FormUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormPattern.resx">
+      <DependentUpon>FormPattern.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="logocircle.ico" />
+    <Content Include="Resources\logo.png" />
+    <Content Include="Resources\logocircle.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
