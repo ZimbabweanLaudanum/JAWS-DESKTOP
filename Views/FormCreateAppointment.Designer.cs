@@ -49,7 +49,7 @@
             this.labelPhone = new System.Windows.Forms.Label();
             this.labelFullname = new System.Windows.Forms.Label();
             this.comboBoxAddress = new System.Windows.Forms.ComboBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerApp = new System.Windows.Forms.DateTimePicker();
             this.buttonCreate = new System.Windows.Forms.Button();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutTitle.SuspendLayout();
@@ -187,7 +187,7 @@
             this.tableLayoutPanelRow.Controls.Add(this.labelPhone, 1, 2);
             this.tableLayoutPanelRow.Controls.Add(this.labelFullname, 1, 0);
             this.tableLayoutPanelRow.Controls.Add(this.comboBoxAddress, 1, 5);
-            this.tableLayoutPanelRow.Controls.Add(this.dateTimePicker1, 1, 11);
+            this.tableLayoutPanelRow.Controls.Add(this.dateTimePickerApp, 1, 11);
             this.tableLayoutPanelRow.Controls.Add(this.buttonCreate, 1, 12);
             this.tableLayoutPanelRow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelRow.Font = new System.Drawing.Font("Arial Narrow", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -215,6 +215,7 @@
             // 
             this.comboBoxFullname.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxFullname.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxFullname.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFullname.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxFullname.FormattingEnabled = true;
             this.comboBoxFullname.Location = new System.Drawing.Point(167, 56);
@@ -240,6 +241,7 @@
             // 
             this.comboBoxDoctor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxDoctor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxDoctor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDoctor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxDoctor.FormattingEnabled = true;
             this.comboBoxDoctor.Location = new System.Drawing.Point(167, 480);
@@ -264,6 +266,7 @@
             // 
             this.comboBoxService.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxService.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxService.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxService.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxService.FormattingEnabled = true;
             this.comboBoxService.Location = new System.Drawing.Point(167, 374);
@@ -332,6 +335,7 @@
             // 
             this.comboBoxAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxAddress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxAddress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAddress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxAddress.FormattingEnabled = true;
             this.comboBoxAddress.Location = new System.Drawing.Point(167, 268);
@@ -340,13 +344,13 @@
             this.comboBoxAddress.TabIndex = 7;
             this.comboBoxAddress.DropDown += new System.EventHandler(this.comboBoxAddress_OnDropDown);
             // 
-            // dateTimePicker1
+            // dateTimePickerApp
             // 
-            this.dateTimePicker1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dateTimePicker1.Location = new System.Drawing.Point(167, 586);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(486, 41);
-            this.dateTimePicker1.TabIndex = 13;
+            this.dateTimePickerApp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dateTimePickerApp.Location = new System.Drawing.Point(167, 586);
+            this.dateTimePickerApp.Name = "dateTimePickerApp";
+            this.dateTimePickerApp.Size = new System.Drawing.Size(486, 41);
+            this.dateTimePickerApp.TabIndex = 13;
             // 
             // buttonCreate
             // 
@@ -406,7 +410,7 @@
         private System.Windows.Forms.Label labelDoctor;
         private System.Windows.Forms.ComboBox comboBoxService;
         private System.Windows.Forms.Label labelDate;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dateTimePickerApp;
         private System.Windows.Forms.Button buttonCreate;
         private System.Windows.Forms.ComboBox comboBoxFullname;
     }

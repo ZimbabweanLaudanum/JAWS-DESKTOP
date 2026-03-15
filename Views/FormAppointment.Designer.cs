@@ -38,7 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutAppointment = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutfilter = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutFilter = new System.Windows.Forms.TableLayoutPanel();
             this.labelClient = new System.Windows.Forms.Label();
             this.labelDoc = new System.Windows.Forms.Label();
             this.labelServ = new System.Windows.Forms.Label();
@@ -49,12 +49,13 @@
             this.dateTimeApp = new System.Windows.Forms.DateTimePicker();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.flowLayoutAppointment = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelDate = new System.Windows.Forms.Label();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutFooter.SuspendLayout();
             this.tableLayoutAppointment.SuspendLayout();
-            this.tableLayoutfilter.SuspendLayout();
+            this.tableLayoutFilter.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelMain
@@ -71,7 +72,7 @@
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1033, 641);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1117, 735);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // tableLayoutTitle
@@ -90,7 +91,7 @@
             this.tableLayoutTitle.Name = "tableLayoutTitle";
             this.tableLayoutTitle.RowCount = 1;
             this.tableLayoutTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutTitle.Size = new System.Drawing.Size(1027, 94);
+            this.tableLayoutTitle.Size = new System.Drawing.Size(1111, 94);
             this.tableLayoutTitle.TabIndex = 0;
             // 
             // pictureBox1
@@ -111,7 +112,7 @@
             this.labelAppointment.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.labelAppointment.Location = new System.Drawing.Point(203, 0);
             this.labelAppointment.Name = "labelAppointment";
-            this.labelAppointment.Size = new System.Drawing.Size(572, 94);
+            this.labelAppointment.Size = new System.Drawing.Size(631, 94);
             this.labelAppointment.TabIndex = 1;
             this.labelAppointment.Text = "Список записей";
             this.labelAppointment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -121,9 +122,9 @@
             this.NavButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.NavButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NavButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.NavButton.Location = new System.Drawing.Point(781, 3);
+            this.NavButton.Location = new System.Drawing.Point(840, 3);
             this.NavButton.Name = "NavButton";
-            this.NavButton.Size = new System.Drawing.Size(243, 88);
+            this.NavButton.Size = new System.Drawing.Size(268, 88);
             this.NavButton.TabIndex = 2;
             this.NavButton.Text = "Навигация";
             this.NavButton.UseVisualStyleBackColor = false;
@@ -140,20 +141,20 @@
             this.tableLayoutFooter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutFooter.Font = new System.Drawing.Font("Arial Narrow", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tableLayoutFooter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.tableLayoutFooter.Location = new System.Drawing.Point(3, 574);
+            this.tableLayoutFooter.Location = new System.Drawing.Point(3, 668);
             this.tableLayoutFooter.Name = "tableLayoutFooter";
             this.tableLayoutFooter.RowCount = 1;
             this.tableLayoutFooter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutFooter.Size = new System.Drawing.Size(1027, 64);
+            this.tableLayoutFooter.Size = new System.Drawing.Size(1111, 64);
             this.tableLayoutFooter.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(516, 0);
+            this.label2.Location = new System.Drawing.Point(558, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(508, 64);
+            this.label2.Size = new System.Drawing.Size(550, 64);
             this.label2.TabIndex = 1;
             this.label2.Text = "LauOpi@gmail.com";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -164,7 +165,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(507, 64);
+            this.label1.Size = new System.Drawing.Size(549, 64);
             this.label1.TabIndex = 0;
             this.label1.Text = "Lau_Opi";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -174,44 +175,46 @@
             this.tableLayoutAppointment.ColumnCount = 2;
             this.tableLayoutAppointment.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutAppointment.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutAppointment.Controls.Add(this.tableLayoutfilter, 1, 0);
+            this.tableLayoutAppointment.Controls.Add(this.tableLayoutFilter, 1, 0);
             this.tableLayoutAppointment.Controls.Add(this.flowLayoutAppointment, 0, 0);
             this.tableLayoutAppointment.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutAppointment.Location = new System.Drawing.Point(3, 103);
             this.tableLayoutAppointment.Name = "tableLayoutAppointment";
             this.tableLayoutAppointment.RowCount = 1;
             this.tableLayoutAppointment.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutAppointment.Size = new System.Drawing.Size(1027, 465);
+            this.tableLayoutAppointment.Size = new System.Drawing.Size(1111, 559);
             this.tableLayoutAppointment.TabIndex = 2;
             // 
-            // tableLayoutfilter
+            // tableLayoutFilter
             // 
-            this.tableLayoutfilter.ColumnCount = 1;
-            this.tableLayoutfilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutfilter.Controls.Add(this.labelClient, 0, 5);
-            this.tableLayoutfilter.Controls.Add(this.labelDoc, 0, 3);
-            this.tableLayoutfilter.Controls.Add(this.labelServ, 0, 1);
-            this.tableLayoutfilter.Controls.Add(this.comboBoxClient, 0, 6);
-            this.tableLayoutfilter.Controls.Add(this.comboBoxDoctor, 0, 4);
-            this.tableLayoutfilter.Controls.Add(this.Search, 0, 0);
-            this.tableLayoutfilter.Controls.Add(this.comboBoxService, 0, 2);
-            this.tableLayoutfilter.Controls.Add(this.dateTimeApp, 0, 7);
-            this.tableLayoutfilter.Controls.Add(this.buttonSearch, 0, 8);
-            this.tableLayoutfilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutfilter.Location = new System.Drawing.Point(721, 3);
-            this.tableLayoutfilter.Name = "tableLayoutfilter";
-            this.tableLayoutfilter.RowCount = 9;
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            this.tableLayoutfilter.Size = new System.Drawing.Size(303, 459);
-            this.tableLayoutfilter.TabIndex = 0;
+            this.tableLayoutFilter.ColumnCount = 1;
+            this.tableLayoutFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutFilter.Controls.Add(this.labelDate, 0, 7);
+            this.tableLayoutFilter.Controls.Add(this.labelClient, 0, 5);
+            this.tableLayoutFilter.Controls.Add(this.labelDoc, 0, 3);
+            this.tableLayoutFilter.Controls.Add(this.labelServ, 0, 1);
+            this.tableLayoutFilter.Controls.Add(this.comboBoxClient, 0, 6);
+            this.tableLayoutFilter.Controls.Add(this.comboBoxDoctor, 0, 4);
+            this.tableLayoutFilter.Controls.Add(this.Search, 0, 0);
+            this.tableLayoutFilter.Controls.Add(this.comboBoxService, 0, 2);
+            this.tableLayoutFilter.Controls.Add(this.dateTimeApp, 0, 8);
+            this.tableLayoutFilter.Controls.Add(this.buttonSearch, 0, 9);
+            this.tableLayoutFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutFilter.Location = new System.Drawing.Point(780, 3);
+            this.tableLayoutFilter.Name = "tableLayoutFilter";
+            this.tableLayoutFilter.RowCount = 10;
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutFilter.Size = new System.Drawing.Size(328, 553);
+            this.tableLayoutFilter.TabIndex = 0;
             // 
             // labelClient
             // 
@@ -219,9 +222,9 @@
             this.labelClient.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelClient.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.labelClient.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
-            this.labelClient.Location = new System.Drawing.Point(3, 255);
+            this.labelClient.Location = new System.Drawing.Point(3, 275);
             this.labelClient.Name = "labelClient";
-            this.labelClient.Size = new System.Drawing.Size(297, 51);
+            this.labelClient.Size = new System.Drawing.Size(322, 55);
             this.labelClient.TabIndex = 8;
             this.labelClient.Text = "Клиент";
             this.labelClient.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -232,9 +235,9 @@
             this.labelDoc.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelDoc.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.labelDoc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
-            this.labelDoc.Location = new System.Drawing.Point(3, 153);
+            this.labelDoc.Location = new System.Drawing.Point(3, 165);
             this.labelDoc.Name = "labelDoc";
-            this.labelDoc.Size = new System.Drawing.Size(297, 51);
+            this.labelDoc.Size = new System.Drawing.Size(322, 55);
             this.labelDoc.TabIndex = 7;
             this.labelDoc.Text = "Доктор";
             this.labelDoc.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -245,9 +248,9 @@
             this.labelServ.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelServ.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.labelServ.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
-            this.labelServ.Location = new System.Drawing.Point(3, 51);
+            this.labelServ.Location = new System.Drawing.Point(3, 55);
             this.labelServ.Name = "labelServ";
-            this.labelServ.Size = new System.Drawing.Size(297, 51);
+            this.labelServ.Size = new System.Drawing.Size(322, 55);
             this.labelServ.TabIndex = 6;
             this.labelServ.Text = "Услуга";
             this.labelServ.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -256,12 +259,13 @@
             // 
             this.comboBoxClient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxClient.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxClient.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxClient.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.comboBoxClient.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxClient.FormattingEnabled = true;
-            this.comboBoxClient.Location = new System.Drawing.Point(3, 309);
+            this.comboBoxClient.Location = new System.Drawing.Point(3, 333);
             this.comboBoxClient.Name = "comboBoxClient";
-            this.comboBoxClient.Size = new System.Drawing.Size(297, 50);
+            this.comboBoxClient.Size = new System.Drawing.Size(322, 50);
             this.comboBoxClient.TabIndex = 3;
             this.comboBoxClient.DropDown += new System.EventHandler(this.comboBoxClient_OnDropDown);
             // 
@@ -269,12 +273,13 @@
             // 
             this.comboBoxDoctor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxDoctor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxDoctor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDoctor.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.comboBoxDoctor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxDoctor.FormattingEnabled = true;
-            this.comboBoxDoctor.Location = new System.Drawing.Point(3, 207);
+            this.comboBoxDoctor.Location = new System.Drawing.Point(3, 223);
             this.comboBoxDoctor.Name = "comboBoxDoctor";
-            this.comboBoxDoctor.Size = new System.Drawing.Size(297, 50);
+            this.comboBoxDoctor.Size = new System.Drawing.Size(322, 50);
             this.comboBoxDoctor.TabIndex = 2;
             this.comboBoxDoctor.DropDown += new System.EventHandler(this.comboBoxDoctor_OnDropDown);
             // 
@@ -286,7 +291,7 @@
             this.Search.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.Search.Location = new System.Drawing.Point(3, 0);
             this.Search.Name = "Search";
-            this.Search.Size = new System.Drawing.Size(297, 51);
+            this.Search.Size = new System.Drawing.Size(322, 55);
             this.Search.TabIndex = 0;
             this.Search.Text = "Поиск/фильтр";
             this.Search.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -295,12 +300,13 @@
             // 
             this.comboBoxService.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.comboBoxService.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxService.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxService.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.comboBoxService.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.comboBoxService.FormattingEnabled = true;
-            this.comboBoxService.Location = new System.Drawing.Point(3, 105);
+            this.comboBoxService.Location = new System.Drawing.Point(3, 113);
             this.comboBoxService.Name = "comboBoxService";
-            this.comboBoxService.Size = new System.Drawing.Size(297, 50);
+            this.comboBoxService.Size = new System.Drawing.Size(322, 50);
             this.comboBoxService.TabIndex = 1;
             this.comboBoxService.DropDown += new System.EventHandler(this.comboBoxService_OnDropDown);
             // 
@@ -313,9 +319,9 @@
             this.dateTimeApp.CalendarTrailingForeColor = System.Drawing.Color.DimGray;
             this.dateTimeApp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dateTimeApp.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
-            this.dateTimeApp.Location = new System.Drawing.Point(3, 360);
+            this.dateTimeApp.Location = new System.Drawing.Point(3, 443);
             this.dateTimeApp.Name = "dateTimeApp";
-            this.dateTimeApp.Size = new System.Drawing.Size(297, 48);
+            this.dateTimeApp.Size = new System.Drawing.Size(322, 48);
             this.dateTimeApp.TabIndex = 4;
             this.dateTimeApp.ValueChanged += new System.EventHandler(this.dateTimeApp_ValueChanged);
             // 
@@ -325,9 +331,9 @@
             this.buttonSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSearch.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.buttonSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.buttonSearch.Location = new System.Drawing.Point(3, 411);
+            this.buttonSearch.Location = new System.Drawing.Point(3, 498);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(297, 45);
+            this.buttonSearch.Size = new System.Drawing.Size(322, 52);
             this.buttonSearch.TabIndex = 5;
             this.buttonSearch.Text = "Поиск";
             this.buttonSearch.UseVisualStyleBackColor = false;
@@ -338,14 +344,27 @@
             this.flowLayoutAppointment.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutAppointment.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutAppointment.Name = "flowLayoutAppointment";
-            this.flowLayoutAppointment.Size = new System.Drawing.Size(712, 459);
+            this.flowLayoutAppointment.Size = new System.Drawing.Size(771, 553);
             this.flowLayoutAppointment.TabIndex = 1;
+            // 
+            // labelDate
+            // 
+            this.labelDate.AutoSize = true;
+            this.labelDate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelDate.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
+            this.labelDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
+            this.labelDate.Location = new System.Drawing.Point(3, 385);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(322, 55);
+            this.labelDate.TabIndex = 9;
+            this.labelDate.Text = "Дата";
+            this.labelDate.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // FormAppointment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1033, 641);
+            this.ClientSize = new System.Drawing.Size(1117, 735);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(820, 420);
@@ -359,8 +378,8 @@
             this.tableLayoutFooter.ResumeLayout(false);
             this.tableLayoutFooter.PerformLayout();
             this.tableLayoutAppointment.ResumeLayout(false);
-            this.tableLayoutfilter.ResumeLayout(false);
-            this.tableLayoutfilter.PerformLayout();
+            this.tableLayoutFilter.ResumeLayout(false);
+            this.tableLayoutFilter.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -376,7 +395,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutAppointment;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutfilter;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutFilter;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutAppointment;
         private System.Windows.Forms.Label Search;
         private System.Windows.Forms.ComboBox comboBoxService;
@@ -387,6 +406,7 @@
         private System.Windows.Forms.Label labelDoc;
         private System.Windows.Forms.Label labelServ;
         private System.Windows.Forms.Label labelClient;
+        private System.Windows.Forms.Label labelDate;
     }
 }
 

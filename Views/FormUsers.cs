@@ -139,6 +139,7 @@ namespace Dentistry_clinic
                                     {
                                         dataGridViewUsers.Rows[row].Cells[3].Value = "Заблокировать";
                                     }
+                                    
                                     //name=name.Split(,'.');
                                     row++;
                                 }

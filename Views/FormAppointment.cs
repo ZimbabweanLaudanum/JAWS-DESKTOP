@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 
 namespace Dentistry_clinic
 {
@@ -26,6 +28,8 @@ namespace Dentistry_clinic
         string client = "";
         string doc = "";
         string serv = "";
+        DateTime? dat=null;
+        int id;
 
         /// <summary>
         /// Загрузка формы с отображением всех записей клиента/врача
@@ -41,31 +45,31 @@ namespace Dentistry_clinic
                 case 1:
                     this.comboBoxDoctor.Text = selectUserName();
                     this.comboBoxDoctor.Hide();
-                    this.tableLayoutfilter.RowStyles[3].SizeType = SizeType.Absolute;
-                    this.tableLayoutfilter.RowStyles[3].Height = 0;
-                    this.tableLayoutfilter.RowStyles[4].SizeType = SizeType.Absolute;
-                    this.tableLayoutfilter.RowStyles[4].Height = 0;
+                    this.tableLayoutFilter.RowStyles[3].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[3].Height = 0;
+                    this.tableLayoutFilter.RowStyles[4].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[4].Height = 0;
                     break;
                 case 4:
 
                     this.comboBoxClient.Text = selectUserName();
                     this.comboBoxClient.Hide();
-                    this.tableLayoutfilter.RowStyles[5].SizeType = SizeType.Absolute;
-                    this.tableLayoutfilter.RowStyles[5].Height = 0;
-                    this.tableLayoutfilter.RowStyles[6].SizeType = SizeType.Absolute;
-                    this.tableLayoutfilter.RowStyles[6].Height = 0;
+                    this.tableLayoutFilter.RowStyles[5].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[5].Height = 0;
+                    this.tableLayoutFilter.RowStyles[6].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[6].Height = 0;
                     break;
-            } 
+            }
             try
             {
                 using (var connection = Helper.GetConnection())
                 {
                     Helper.OpenCon(connection);
 
-                    string query = $"SELECT client.User_fullname AS Client_name, c.Clinic_Address, s.Service_name, s.Service_cost, doctor.User_fullname AS Doctor_name, a.Visit_date FROM Appointment a INNER JOIN User_tab client ON a.Client_id = client.User_id INNER JOIN Clinic c ON a.Clinic_id = c.Clinic_id INNER JOIN Service s ON a.Service_id = s.Service_id INNER JOIN User_tab doctor ON a.Doctor_id = doctor.User_id";
+                    string query = $"SELECT a.Appointment_id, client.User_fullname AS Client_name, c.Clinic_Address, s.Service_name, s.Service_cost, doctor.User_fullname AS Doctor_name, a.Visit_date FROM Appointment a INNER JOIN User_tab client ON a.Client_id = client.User_id INNER JOIN Clinic c ON a.Clinic_id = c.Clinic_id INNER JOIN Service s ON a.Service_id = s.Service_id INNER JOIN User_tab doctor ON a.Doctor_id = doctor.User_id";
                     switch (Helper.role)
                     {
-                        case(1):
+                        case (1):
                             query += " WHERE doctor.User_email = @login;";
                             break;
                         case (4):
@@ -82,6 +86,7 @@ namespace Dentistry_clinic
                             {
                                 while (reader.Read())
                                 {
+                                    id = (Int32)reader["Appointment_id"];
                                     string client = (string)reader["Client_name"];
                                     string clinic = (string)reader["Clinic_Address"];
                                     string service = (string)reader["Service_name"];
@@ -127,86 +132,181 @@ namespace Dentistry_clinic
             cardPanel.BorderStyle = BorderStyle.FixedSingle;
             cardPanel.BackColor = Color.White;
             cardPanel.Margin = new Padding(5);
-            
 
+            /// Скрытый номер записи
+            Label idApp = new Label();
+            idApp.Text = id.ToString();
+            idApp.Height = 0;
+            cardPanel.Controls.Add(idApp);
 
-            // Добавление Label для строки клиента
+            ///Добавление заголовка клиента
             Label clientLabel = new Label();
-            clientLabel.Text = client;
-            clientLabel.Font= new Font("Arial Narrow", 16);
+            clientLabel.Text = "Клиент:";
+            clientLabel.Font = new Font("Arial Narrow", 16);
             clientLabel.Location = new Point(10, 10);
-            clientLabel.Width= 220;
-            clientLabel.MaximumSize = new Size(220, 100);
-            
             cardPanel.Controls.Add(clientLabel);
 
             int currentY = clientLabel.Bottom + 10;
 
-            // Добавление Label для строки доктора
+            // Добавление строки клиента
+            System.Windows.Forms.TextBox clientText = new System.Windows.Forms.TextBox();
+            clientText.Text = client;
+            clientText.Font = new Font("Arial Narrow", 16);
+            clientText.Location = new Point(10, currentY);
+            clientText.Width = 220;
+            clientText.Multiline = true;
+            Size size = TextRenderer.MeasureText(clientText.Text, clientText.Font);
+            clientText.Height = size.Height * 2;
+            clientText.ReadOnly = true;
+            cardPanel.Controls.Add(clientText);
+
+            currentY = clientText.Bottom + 10;
+
+            ///Добавление заголовка врач
             Label doctorLabel = new Label();
-            doctorLabel.Text = doctor;
+            doctorLabel.Text = "Врач:";
             doctorLabel.Font = new Font("Arial Narrow", 16);
             doctorLabel.Location = new Point(10, currentY);
-            doctorLabel.Width = 220;
-            doctorLabel.MaximumSize = new Size(220, 100);
             cardPanel.Controls.Add(doctorLabel);
 
             currentY = doctorLabel.Bottom + 10;
 
-            // Добавление Label для строки услуги
+            // Добавление строки доктора
+            System.Windows.Forms.TextBox doctorText = new System.Windows.Forms.TextBox();
+            doctorText.Text = doctor;
+            doctorText.Font = new Font("Arial Narrow", 16);
+            doctorText.Location = new Point(10, currentY);
+            doctorText.Width = 220;
+            doctorText.Multiline = true;
+            doctorText.Height = size.Height * 2;
+            doctorText.ReadOnly = true;
+            cardPanel.Controls.Add(doctorText);
+
+            currentY = doctorText.Bottom + 10;
+
+            ///Добавление заголовка услуги
             Label serviceLabel = new Label();
-            serviceLabel.Text = service;
+            serviceLabel.Text = "Услуга:";
             serviceLabel.Font = new Font("Arial Narrow", 16);
             serviceLabel.Location = new Point(10, currentY);
-            serviceLabel.Width = 220;
-            serviceLabel.MaximumSize = new Size(220, 100);
             cardPanel.Controls.Add(serviceLabel);
 
             currentY = serviceLabel.Bottom + 10;
 
-            // Добавление Label для строки стоимости услуги 
-            Label serviceCostLabel = new Label();
-            serviceCostLabel.Text = service_cost.ToString();
-            serviceCostLabel.Font = new Font("Arial Narrow", 16);
-            serviceCostLabel.Location = new Point(10, currentY);
-            serviceCostLabel.Width = 220;
-            serviceCostLabel.MaximumSize = new Size(220, 100);
-            cardPanel.Controls.Add(serviceCostLabel);
+            // Добавление строки услуги
+            System.Windows.Forms.TextBox serviceText = new System.Windows.Forms.TextBox();
+            serviceText.Text = service;
+            serviceText.Font = new Font("Arial Narrow", 16);
+            serviceText.Location = new Point(10, currentY);
+            serviceText.Width = 220;
+            serviceText.Multiline = true;
+            serviceText.Height = size.Height;
+            serviceText.ReadOnly = true;
+            cardPanel.Controls.Add(serviceText);
 
-            currentY = serviceCostLabel.Bottom + 10;
-            //MessageBox.Show(serviceCostLabel.Bottom.ToString());
+            currentY = serviceText.Bottom + 10;
 
-            // Добавление Label для строки клиники
+            ///Добавление заголовка стоимости
+            Label costLabel = new Label();
+            costLabel.Text = "Стоимость:";
+            costLabel.Font = new Font("Arial Narrow", 16);
+            costLabel.Location = new Point(10, currentY);
+            cardPanel.Controls.Add(costLabel);
+
+            currentY = costLabel.Bottom + 10;
+
+            // Добавление строки стоимости услуги 
+            System.Windows.Forms.TextBox serviceCostText = new System.Windows.Forms.TextBox();
+            serviceCostText.Text = service_cost.ToString();
+            serviceCostText.Font = new Font("Arial Narrow", 16);
+            serviceCostText.Location = new Point(10, currentY);
+            serviceCostText.Width = 220;
+            serviceCostText.Multiline = true;
+            serviceCostText.Height = size.Height;
+            serviceCostText.ReadOnly = true;
+            cardPanel.Controls.Add(serviceCostText);
+
+            currentY = serviceCostText.Bottom + 10;
+
+            ///Добавление заголовка адреса клиники
             Label clinicLabel = new Label();
-            clinicLabel.Text = clinic;
+            clinicLabel.Text = "Адрес:";
             clinicLabel.Font = new Font("Arial Narrow", 16);
             clinicLabel.Location = new Point(10, currentY);
-            clinicLabel.Width = 220;
-            clinicLabel.MaximumSize = new Size(220, 100);
             cardPanel.Controls.Add(clinicLabel);
 
             currentY = clinicLabel.Bottom + 10;
 
-            // Добавление Label для строки услуги
+            // Добавление строки клиники
+            System.Windows.Forms.TextBox clinicText = new System.Windows.Forms.TextBox();
+            clinicText.Text = clinic;
+            clinicText.Font = new Font("Arial Narrow", 16);
+            clinicText.Location = new Point(10, currentY);
+            clinicText.Width = 220;
+            clinicText.Multiline = true;
+            clinicText.Height = size.Height * 2;
+            clinicText.ReadOnly = true;
+            cardPanel.Controls.Add(clinicText);
+
+            currentY = clinicText.Bottom + 10;
+
+            ///Добавление заголовка даты
             Label dateLabel = new Label();
-            dateLabel.Text = date.ToString();
+            dateLabel.Text = "Дата:";
             dateLabel.Font = new Font("Arial Narrow", 16);
             dateLabel.Location = new Point(10, currentY);
-            dateLabel.Width = 220;
-            dateLabel.MaximumSize = new Size(220, 100);
             cardPanel.Controls.Add(dateLabel);
 
             currentY = dateLabel.Bottom + 10;
 
-            // Добавление Button
-            Button delButton = new Button();
+            //Добавление строки даты
+            System.Windows.Forms.TextBox dateText = new System.Windows.Forms.TextBox();
+            dateText.Text = date.ToString();
+            dateText.Font = new Font("Arial Narrow", 16);
+            dateText.Location = new Point(10, currentY);
+            dateText.Width = 220;
+            dateText.Multiline = true;
+            dateText.Height = size.Height;
+            dateText.ReadOnly = true;
+            cardPanel.Controls.Add(dateText);
+
+            currentY = dateText.Bottom + 10;
+
+            // Кнопка редактирования
+            System.Windows.Forms.Button EditButton = new System.Windows.Forms.Button();
+            EditButton.Tag = id;
+            EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            EditButton.Width = 40;
+            EditButton.Height = 40;
+            EditButton.BackColor = Color.FromArgb(26, 206, 26);
+            EditButton.Image = Image.FromFile(@"C:\Users\Laudanum\Desktop\jaws desktop\Project\Dentistry clinic\Resources\edit.png");
+            EditButton.Location = new Point(100, currentY);
+            cardPanel.Controls.Add(EditButton);
+            this.flowLayoutAppointment.Controls.Add(cardPanel);
+
+            // Кнопка удаления
+            System.Windows.Forms.Button delButton = new System.Windows.Forms.Button();
+            delButton.Width = 40;
+            delButton.Height = 40;
             delButton.BackColor = Color.FromArgb(206, 26, 26);
-            delButton.Text = "Удалить";
-            delButton.Font = new Font("Arial Narrow", 16);
+            delButton.Image = Image.FromFile(@"C:\Users\Laudanum\Desktop\jaws desktop\Project\Dentistry clinic\Resources\delete.png");
             delButton.Location = new Point(160, currentY);
             cardPanel.Controls.Add(delButton);
             this.flowLayoutAppointment.Controls.Add(cardPanel);
         }
+
+        /// <summary>
+        /// Нажатие на кнопку редактирование записи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Button btn = (System.Windows.Forms.Button)sender;
+            int data = Convert.ToInt32(btn.Tag);
+            updateCard(data);
+        }
+
 
         /// <summary>
         /// Возвращение к окну навигации
@@ -366,19 +466,22 @@ namespace Dentistry_clinic
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             this.flowLayoutAppointment.Controls.Clear();
-            if (this.comboBoxClient.Text != "")
+            if (this.comboBoxClient.SelectedItem != null)
             {
                 client = this.comboBoxClient.Text;
             }
-            if (this.comboBoxDoctor.Text != "")
+            if (this.comboBoxDoctor.SelectedItem != null)
             {
                 doc = this.comboBoxDoctor.Text;
             }
-            if (this.comboBoxService.Text != "")
+            if (this.comboBoxService.SelectedItem != null)
             {
-                serv= this.comboBoxService.Text;
+                serv = this.comboBoxService.Text;
             }
-            DateTime dat = dateTimeApp.Value.Date;
+            if (this.dateTimeApp.CustomFormat != " ")
+            {
+                dat = this.dateTimeApp.Value.Date;
+            }
 
             try
             {
@@ -421,7 +524,11 @@ namespace Dentistry_clinic
                         command.Parameters.AddWithValue("@ClientName", client);
                         command.Parameters.AddWithValue("@ServiceName", serv);
                         command.Parameters.AddWithValue("@DoctorFullname", doc);
+                        //if(!(dat is null))
                         command.Parameters.AddWithValue("@Date", dat);
+
+                        //MessageBox.Show(dat.ToString());
+
                         using (var reader = command.ExecuteReader())
                         {
                             if (reader.HasRows)
@@ -453,6 +560,10 @@ namespace Dentistry_clinic
             }
         }
 
+        /// <summary>
+        /// Загрузка имени пользователя
+        /// </summary>
+        /// <returns></returns>
         private string selectUserName()
         {
             try
@@ -495,9 +606,25 @@ namespace Dentistry_clinic
             }
         }
 
+        /// <summary>
+        /// Выбор даты
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dateTimeApp_ValueChanged(object sender, EventArgs e)
         {
             dateTimeApp.Format = DateTimePickerFormat.Short;
+        }
+
+        /// <summary>
+        /// Открытие окна редактирования
+        /// </summary>
+        /// <param name="id"></param>
+        private void updateCard(int id)
+        {
+            FormCreateAppointment formApp = new FormCreateAppointment(2, id);
+            this.Hide();
+            formApp.Show();
         }
     }
 }

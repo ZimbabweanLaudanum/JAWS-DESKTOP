@@ -149,6 +149,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="logocircle.ico" />
+    <Content Include="Resources\delete.png" />
+    <Content Include="Resources\edit.png" />
     <Content Include="Resources\logo.png" />
     <Content Include="Resources\logocircle.ico" />
   </ItemGroup>

@@ -78,11 +78,16 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void buttonAppointment_Click(object sender, EventArgs e)
         {
-            FormCreateAppointment createAppointment = new FormCreateAppointment();
+            FormCreateAppointment createAppointment = new FormCreateAppointment(1, 0);
             this.Hide();
             createAppointment.Show();
         }
 
+        /// <summary>
+        /// Открытие списка пользователей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonUserList_Click(object sender, EventArgs e)
         {
             FormUsers users = new FormUsers();
@@ -175,7 +180,7 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void buttonEditAccount_Click(object sender, EventArgs e)
         {
-            FormUserCard UserForm = new FormUserCard(2, Helper.login);
+            FormUserCard UserForm = new FormUserCard(4, Helper.login);
             this.Hide();
             UserForm.Show();
         }

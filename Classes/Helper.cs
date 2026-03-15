@@ -94,5 +94,16 @@ namespace Dentistry_clinic.Classes
             }
             return false;
         }
+        
+        ///string sql = "select ..."
+        ///sqldataadapter ad=new sqldataadapter(sql, helper.connection);
+        ///datatable dt = new datatable();
+        ///ad.fill(dt);
+        ///datarow client =dt.newrow();
+        ///client["fullanme"]=textbox.text;
+        ///dt.rows.add(client);
+        ///sqlcommandbuilder commandBuilder=new sqlcommandbuiledr
+        ///commandBuilder.dataadapter=ad;
+        ///ad.update(dt);
     }
 }

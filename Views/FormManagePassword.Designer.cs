@@ -38,12 +38,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPasswordMain = new System.Windows.Forms.TableLayoutPanel();
+            this.textBoxRepeatPassword = new System.Windows.Forms.TextBox();
+            this.labelRepeatPassword = new System.Windows.Forms.Label();
+            this.textBoxNewPassword = new System.Windows.Forms.TextBox();
+            this.labelNewPassword = new System.Windows.Forms.Label();
             this.labelCurrPassword = new System.Windows.Forms.Label();
             this.textBoxCurrPassword = new System.Windows.Forms.TextBox();
-            this.labelNewPassword = new System.Windows.Forms.Label();
-            this.textBoxNewPassword = new System.Windows.Forms.TextBox();
-            this.labelRepeatPassword = new System.Windows.Forms.Label();
-            this.textBoxRepeatPassword = new System.Windows.Forms.TextBox();
             this.buttonConfirm = new System.Windows.Forms.Button();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutTitle.SuspendLayout();
@@ -193,6 +193,46 @@
             this.tableLayoutPasswordMain.Size = new System.Drawing.Size(1027, 465);
             this.tableLayoutPasswordMain.TabIndex = 2;
             // 
+            // textBoxRepeatPassword
+            // 
+            this.textBoxRepeatPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxRepeatPassword.Location = new System.Drawing.Point(208, 336);
+            this.textBoxRepeatPassword.Name = "textBoxRepeatPassword";
+            this.textBoxRepeatPassword.PasswordChar = '*';
+            this.textBoxRepeatPassword.Size = new System.Drawing.Size(610, 48);
+            this.textBoxRepeatPassword.TabIndex = 5;
+            // 
+            // labelRepeatPassword
+            // 
+            this.labelRepeatPassword.AutoSize = true;
+            this.labelRepeatPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelRepeatPassword.Location = new System.Drawing.Point(208, 277);
+            this.labelRepeatPassword.Name = "labelRepeatPassword";
+            this.labelRepeatPassword.Size = new System.Drawing.Size(610, 56);
+            this.labelRepeatPassword.TabIndex = 4;
+            this.labelRepeatPassword.Text = "Повторите новый пароль";
+            this.labelRepeatPassword.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBoxNewPassword
+            // 
+            this.textBoxNewPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxNewPassword.Location = new System.Drawing.Point(208, 223);
+            this.textBoxNewPassword.Name = "textBoxNewPassword";
+            this.textBoxNewPassword.PasswordChar = '*';
+            this.textBoxNewPassword.Size = new System.Drawing.Size(610, 48);
+            this.textBoxNewPassword.TabIndex = 3;
+            // 
+            // labelNewPassword
+            // 
+            this.labelNewPassword.AutoSize = true;
+            this.labelNewPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelNewPassword.Location = new System.Drawing.Point(208, 145);
+            this.labelNewPassword.Name = "labelNewPassword";
+            this.labelNewPassword.Size = new System.Drawing.Size(610, 75);
+            this.labelNewPassword.TabIndex = 2;
+            this.labelNewPassword.Text = "Введите новый пароль";
+            this.labelNewPassword.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // labelCurrPassword
             // 
             this.labelCurrPassword.AutoSize = true;
@@ -212,46 +252,6 @@
             this.textBoxCurrPassword.PasswordChar = '*';
             this.textBoxCurrPassword.Size = new System.Drawing.Size(610, 48);
             this.textBoxCurrPassword.TabIndex = 1;
-            // 
-            // labelNewPassword
-            // 
-            this.labelNewPassword.AutoSize = true;
-            this.labelNewPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelNewPassword.Location = new System.Drawing.Point(208, 145);
-            this.labelNewPassword.Name = "labelNewPassword";
-            this.labelNewPassword.Size = new System.Drawing.Size(610, 75);
-            this.labelNewPassword.TabIndex = 2;
-            this.labelNewPassword.Text = "Введите новый пароль";
-            this.labelNewPassword.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // textBoxNewPassword
-            // 
-            this.textBoxNewPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxNewPassword.Location = new System.Drawing.Point(208, 223);
-            this.textBoxNewPassword.Name = "textBoxNewPassword";
-            this.textBoxNewPassword.PasswordChar = '*';
-            this.textBoxNewPassword.Size = new System.Drawing.Size(610, 48);
-            this.textBoxNewPassword.TabIndex = 3;
-            // 
-            // labelRepeatPassword
-            // 
-            this.labelRepeatPassword.AutoSize = true;
-            this.labelRepeatPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelRepeatPassword.Location = new System.Drawing.Point(208, 277);
-            this.labelRepeatPassword.Name = "labelRepeatPassword";
-            this.labelRepeatPassword.Size = new System.Drawing.Size(610, 56);
-            this.labelRepeatPassword.TabIndex = 4;
-            this.labelRepeatPassword.Text = "Повторите новый пароль";
-            this.labelRepeatPassword.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // textBoxRepeatPassword
-            // 
-            this.textBoxRepeatPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxRepeatPassword.Location = new System.Drawing.Point(208, 336);
-            this.textBoxRepeatPassword.Name = "textBoxRepeatPassword";
-            this.textBoxRepeatPassword.PasswordChar = '*';
-            this.textBoxRepeatPassword.Size = new System.Drawing.Size(610, 48);
-            this.textBoxRepeatPassword.TabIndex = 5;
             // 
             // buttonConfirm
             // 

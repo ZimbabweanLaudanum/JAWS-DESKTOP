@@ -1,5 +1,6 @@
 ﻿using Dentistry_clinic.Classes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,13 +11,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace Dentistry_clinic
 {
     public partial class FormCreateAppointment : Form
     {
+        /// <summary>
+        /// Режим работы окна:
+        /// 1 - Создание записи
+        /// 2 - Редактирование записи
+        /// </summary>
+        int mode, id;
+
         public FormCreateAppointment()
         {
             InitializeComponent();
+            comboBoxFullname.KeyPress += (sender, e) => e.Handled = true;
+            comboBoxDoctor.KeyPress += (sender, e) => e.Handled = true;
+            comboBoxService.KeyPress += (sender, e) => e.Handled = true;
+            comboBoxAddress.KeyPress += (sender, e) => e.Handled = true;
+        }
+
+        public FormCreateAppointment(int mode, int id)
+        {
+            InitializeComponent();
+            this.mode = mode;
+            this.id = id;
             comboBoxFullname.KeyPress += (sender, e) => e.Handled = true;
             comboBoxDoctor.KeyPress += (sender, e) => e.Handled = true;
             comboBoxService.KeyPress += (sender, e) => e.Handled = true;
@@ -30,46 +50,67 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            switch (Helper.role)
+            switch (mode)
             {
-                case 4:
-                    try
+                case 1:
+                    switch (Helper.role)
                     {
-                        using (var connection = Helper.GetConnection())
-                        {
-                            Helper.OpenCon(connection);
-
-                            string query = $"SELECT User_fullname, User_Phone from User_tab WHERE User_email = @login;";
-                            using (SqlCommand command = new SqlCommand(query, connection))
+                        case 4:
+                            try
                             {
-                                // Параметры для защиты от SQL-инъекций
-                                command.Parameters.AddWithValue("@login", Helper.login);
-                                using (var reader = command.ExecuteReader())
+                                using (var connection = Helper.GetConnection())
                                 {
-                                    if (reader.HasRows)
+                                    Helper.OpenCon(connection);
+
+                                    string query = $"SELECT User_fullname, User_Phone from User_tab WHERE User_email = @login;";
+                                    using (SqlCommand command = new SqlCommand(query, connection))
                                     {
-                                        while (reader.Read())
+                                        // Параметры для защиты от SQL-инъекций
+                                        command.Parameters.AddWithValue("@login", Helper.login);
+                                        using (var reader = command.ExecuteReader())
                                         {
-                                            string client = (string)reader["User_fullname"];
-                                            string phone = (string)reader["User_Phone"];
-                                            comboBoxFullname.Text = client;
-                                            textBoxPhone.Text = phone;
+                                            if (reader.HasRows)
+                                            {
+                                                while (reader.Read())
+                                                {
+                                                    string client = (string)reader["User_fullname"];
+                                                    string phone = (string)reader["User_Phone"];
+                                                    comboBoxFullname.Text = client;
+                                                    textBoxPhone.Text = phone;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("No rows found.");
+                                            }
+                                            reader.Close();
                                         }
                                     }
-                                    else
-                                    {
-                                        MessageBox.Show("No rows found.");
-                                    }
-                                    reader.Close();
+                                    Helper.CloseCon(connection);
                                 }
                             }
-                            Helper.CloseCon(connection);
-                        }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                            break;
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
+                    break;
+                case 2:
+                    string sql = $"SELECT a.Appointment_id, client.User_fullname AS Client_name, client.User_phone AS Client_phone, c.Clinic_Address, s.Service_name, doctor.User_fullname AS Doctor_name, a.Visit_date FROM Appointment a INNER JOIN User_tab client ON a.Client_id = client.User_id INNER JOIN Clinic c ON a.Clinic_id = c.Clinic_id INNER JOIN Service s ON a.Service_id = s.Service_id INNER JOIN User_tab doctor ON a.Doctor_id = doctor.User_id where Appointment_id=" + id;
+                    SqlDataAdapter ad = new SqlDataAdapter(sql, Helper.conString);
+                    DataTable dt = new DataTable();
+                    ad.Fill(dt);
+                    DataRow appointment = dt.Rows[0];
+                    comboBoxFullname.SelectedItem = appointment["Client_name"].ToString();
+                    textBoxPhone.Text = appointment["Client_phone"].ToString();
+                    comboBoxAddress.SelectedItem = appointment["Clinic_Address"].ToString();
+                    comboBoxService.SelectedItem = appointment["Service_name"].ToString();
+                    comboBoxDoctor.SelectedItem = appointment["Doctor_name"].ToString();
+                    dateTimePickerApp.Value = Convert.ToDateTime(appointment["Visit_date"]);
+                    //MessageBox.Show(appointment["Client_name"].ToString());
+                    //DataRow appointment =dt.NewRow();
+                    //client["fullanme"]=textbox.text;
                     break;
             }
         }
@@ -303,113 +344,118 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void buttonCreate_Click(object sender, EventArgs e)
         {
-            string client;
-            string phone;
-            string add;
-            string doc;
-            string serv;
-            DateTime date;
+            switch (mode)
+            {
+                case 1:
+                    string client;
+                    string phone;
+                    string add;
+                    string doc;
+                    string serv;
+                    DateTime date;
 
-            if (this.textBoxPhone.Text is null)
-            {
-                MessageBox.Show("Заполните поле Номер телефона");
-                return;
-            }
-            else
-            {
-                phone = textBoxPhone.Text;
-            }
-            try
-            {
-                using (var connection = Helper.GetConnection())
-                {
-                    Helper.OpenCon(connection);
-
-                    string query = "UPDATE u SET u.User_Phone = @NewPhoneNumber FROM User_tab u WHERE u.User_email = @UserEmail AND (u.User_Phone != @NewPhoneNumber OR u.User_Phone IS NULL);";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    if (this.textBoxPhone.Text is null)
                     {
-                        // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@NewPhoneNumber", phone);
-                        command.Parameters.AddWithValue("@UserEmail", Helper.login);
-
-                        command.BeginExecuteNonQuery();
+                        MessageBox.Show("Заполните поле Номер телефона");
+                        return;
                     }
-                    Helper.CloseCon(connection);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-
-            if (this.comboBoxFullname.Text == "")
-            {
-                MessageBox.Show("Выберите клиента");
-                return;
-            } 
-            else
-            {
-                client = comboBoxFullname.Text;
-            }
-
-            if (this.comboBoxAddress.Text == "")
-            {
-                MessageBox.Show("Выберите адрес клиники");
-                return;
-            }
-            else
-            {
-                add = comboBoxAddress.Text;
-            }
-
-            if (this.comboBoxDoctor.Text == "")
-            {
-                MessageBox.Show("Выберите врача");
-                return;
-            }
-            else
-            {
-                doc = comboBoxDoctor.Text;
-            }
-
-            if (this.comboBoxService.Text == "")
-            {
-                MessageBox.Show("Выберите врача");
-                return;
-            }
-            else
-            {
-                serv = comboBoxService.Text;
-            }
-
-            date = dateTimePicker1.Value;
-
-            try
-            {
-                using (var connection = Helper.GetConnection())
-                {
-                    Helper.OpenCon(connection);
-
-                    string query = "INSERT INTO Appointment (Client_id, Clinic_id, Service_id, Doctor_id, Visit_date) SELECT client.User_id, clinic.Clinic_id, service.Service_id, doctor.User_id, @VisitDate FROM (SELECT @ClientFullname AS client_name, @ClinicAddress AS clinic_address, @ServiceName AS service_name, @DoctorName AS doctor_name) AS input LEFT JOIN User_tab client ON client.User_fullname = input.client_name LEFT JOIN Clinic clinic ON clinic.Clinic_Address = input.clinic_address LEFT JOIN Service service ON service.Service_name = input.service_name LEFT JOIN User_tab doctor ON doctor.User_fullname = input.doctor_name WHERE client.User_id IS NOT NULL AND clinic.Clinic_id IS NOT NULL AND service.Service_id IS NOT NULL AND doctor.User_id IS NOT NULL;";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    else
                     {
-                        // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@ClientFullname", client);
-                        command.Parameters.AddWithValue("@ClinicAddress", add);
-                        command.Parameters.AddWithValue("@ServiceName", serv);
-                        command.Parameters.AddWithValue("@DoctorName", doc);
-                        command.Parameters.AddWithValue("@VisitDate", date);
-                        int rows = command.ExecuteNonQuery();
+                        phone = textBoxPhone.Text;
                     }
-                    Helper.CloseCon(connection);
-                }
-                MessageBox.Show("Запись успешно создана.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
+                    try
+                    {
+                        using (var connection = Helper.GetConnection())
+                        {
+                            Helper.OpenCon(connection);
+
+                            string query = "UPDATE u SET u.User_Phone = @NewPhoneNumber FROM User_tab u WHERE u.User_email = @UserEmail AND (u.User_Phone != @NewPhoneNumber OR u.User_Phone IS NULL);";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                // Параметры для защиты от SQL-инъекций
+                                command.Parameters.AddWithValue("@NewPhoneNumber", phone);
+                                command.Parameters.AddWithValue("@UserEmail", Helper.login);
+
+                                command.BeginExecuteNonQuery();
+                            }
+                            Helper.CloseCon(connection);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+
+                    if (this.comboBoxFullname.Text == "")
+                    {
+                        MessageBox.Show("Выберите клиента");
+                        return;
+                    }
+                    else
+                    {
+                        client = comboBoxFullname.Text;
+                    }
+
+                    if (this.comboBoxAddress.Text == "")
+                    {
+                        MessageBox.Show("Выберите адрес клиники");
+                        return;
+                    }
+                    else
+                    {
+                        add = comboBoxAddress.Text;
+                    }
+
+                    if (this.comboBoxDoctor.Text == "")
+                    {
+                        MessageBox.Show("Выберите врача");
+                        return;
+                    }
+                    else
+                    {
+                        doc = comboBoxDoctor.Text;
+                    }
+
+                    if (this.comboBoxService.Text == "")
+                    {
+                        MessageBox.Show("Выберите врача");
+                        return;
+                    }
+                    else
+                    {
+                        serv = comboBoxService.Text;
+                    }
+
+                    date = dateTimePickerApp.Value;
+
+                    try
+                    {
+                        using (var connection = Helper.GetConnection())
+                        {
+                            Helper.OpenCon(connection);
+
+                            string query = "INSERT INTO Appointment (Client_id, Clinic_id, Service_id, Doctor_id, Visit_date) SELECT client.User_id, clinic.Clinic_id, service.Service_id, doctor.User_id, @VisitDate FROM (SELECT @ClientFullname AS client_name, @ClinicAddress AS clinic_address, @ServiceName AS service_name, @DoctorName AS doctor_name) AS input LEFT JOIN User_tab client ON client.User_fullname = input.client_name LEFT JOIN Clinic clinic ON clinic.Clinic_Address = input.clinic_address LEFT JOIN Service service ON service.Service_name = input.service_name LEFT JOIN User_tab doctor ON doctor.User_fullname = input.doctor_name WHERE client.User_id IS NOT NULL AND clinic.Clinic_id IS NOT NULL AND service.Service_id IS NOT NULL AND doctor.User_id IS NOT NULL;";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                // Параметры для защиты от SQL-инъекций
+                                command.Parameters.AddWithValue("@ClientFullname", client);
+                                command.Parameters.AddWithValue("@ClinicAddress", add);
+                                command.Parameters.AddWithValue("@ServiceName", serv);
+                                command.Parameters.AddWithValue("@DoctorName", doc);
+                                command.Parameters.AddWithValue("@VisitDate", date);
+                                int rows = command.ExecuteNonQuery();
+                            }
+                            Helper.CloseCon(connection);
+                        }
+                        MessageBox.Show("Запись успешно создана.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                    break;
             }
         }
 
