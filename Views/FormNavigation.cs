@@ -96,6 +96,18 @@ namespace Dentistry_clinic
         }
 
         /// <summary>
+        /// Открытия окна редактирования аккаунта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonEditAccount_Click(object sender, EventArgs e)
+        {
+            FormUserCard UserForm = new FormUserCard(4, Helper.login);
+            this.Hide();
+            UserForm.Show();
+        }
+
+        /// <summary>
         /// Функция для скрытия кнопки открытия окна записи
         /// </summary>
         private void hideButtonAppointment()
@@ -174,15 +186,16 @@ namespace Dentistry_clinic
         }
 
         /// <summary>
-        /// Открытия окна редактирования аккаунта
+        /// Открытие формы статистики
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonEditAccount_Click(object sender, EventArgs e)
+        private void buttonReport_Click(object sender, EventArgs e)
         {
-            FormUserCard UserForm = new FormUserCard(4, Helper.login);
+            FormStatic form = new FormStatic();
             this.Hide();
-            UserForm.Show();
+            form.ShowDialog();
+            this.Show();
         }
     }
 }

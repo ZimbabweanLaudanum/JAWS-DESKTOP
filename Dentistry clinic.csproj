@@ -36,8 +36,13 @@
     <ApplicationIcon>logocircle.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Word.15.0.4797.1004\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,6 +85,12 @@
     <Compile Include="Views\FormManagePassword.Designer.cs">
       <DependentUpon>FormManagePassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\FormStatic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormStatic.Designer.cs">
+      <DependentUpon>FormStatic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\FormUserCard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +126,9 @@
     <EmbeddedResource Include="Views\FormManagePassword.resx">
       <DependentUpon>FormManagePassword.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormStatic.resx">
+      <DependentUpon>FormStatic.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\FormUserCard.resx">
       <DependentUpon>FormUserCard.cs</DependentUpon>
     </EmbeddedResource>
@@ -133,6 +147,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -148,6 +163,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="CheckedViews.txt" />
     <Content Include="logocircle.ico" />
     <Content Include="Resources\delete.png" />
     <Content Include="Resources\edit.png" />

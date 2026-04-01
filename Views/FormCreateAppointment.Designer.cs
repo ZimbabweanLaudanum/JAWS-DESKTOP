@@ -222,7 +222,6 @@
             this.comboBoxFullname.Name = "comboBoxFullname";
             this.comboBoxFullname.Size = new System.Drawing.Size(486, 41);
             this.comboBoxFullname.TabIndex = 15;
-            this.comboBoxFullname.DropDown += new System.EventHandler(this.comboBoxFullname_OnDropDown);
             this.comboBoxFullname.SelectedIndexChanged += new System.EventHandler(this.comboBoxFullname_SelectedIndexChanged);
             // 
             // labelDate
@@ -248,7 +247,6 @@
             this.comboBoxDoctor.Name = "comboBoxDoctor";
             this.comboBoxDoctor.Size = new System.Drawing.Size(486, 41);
             this.comboBoxDoctor.TabIndex = 11;
-            this.comboBoxDoctor.DropDown += new System.EventHandler(this.comboBoxDoctor_OnDropDown);
             // 
             // labelDoctor
             // 
@@ -273,7 +271,6 @@
             this.comboBoxService.Name = "comboBoxService";
             this.comboBoxService.Size = new System.Drawing.Size(486, 41);
             this.comboBoxService.TabIndex = 9;
-            this.comboBoxService.DropDown += new System.EventHandler(this.comboBoxService_OnDropDown);
             // 
             // labelService
             // 
@@ -328,7 +325,7 @@
             this.labelFullname.Name = "labelFullname";
             this.labelFullname.Size = new System.Drawing.Size(486, 53);
             this.labelFullname.TabIndex = 2;
-            this.labelFullname.Text = "ФИО";
+            this.labelFullname.Text = "ФИО клиента";
             this.labelFullname.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // comboBoxAddress
@@ -342,7 +339,6 @@
             this.comboBoxAddress.Name = "comboBoxAddress";
             this.comboBoxAddress.Size = new System.Drawing.Size(486, 41);
             this.comboBoxAddress.TabIndex = 7;
-            this.comboBoxAddress.DropDown += new System.EventHandler(this.comboBoxAddress_OnDropDown);
             // 
             // dateTimePickerApp
             // 
@@ -375,7 +371,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(820, 420);
             this.Name = "FormCreateAppointment";
-            this.Text = "Form1";
+            this.Text = "Запись на приём";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.tableLayoutTitle.ResumeLayout(false);

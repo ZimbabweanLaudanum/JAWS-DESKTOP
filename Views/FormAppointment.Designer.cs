@@ -39,6 +39,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutAppointment = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutFilter = new System.Windows.Forms.TableLayoutPanel();
+            this.labelDate = new System.Windows.Forms.Label();
             this.labelClient = new System.Windows.Forms.Label();
             this.labelDoc = new System.Windows.Forms.Label();
             this.labelServ = new System.Windows.Forms.Label();
@@ -49,7 +50,6 @@
             this.dateTimeApp = new System.Windows.Forms.DateTimePicker();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.flowLayoutAppointment = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelDate = new System.Windows.Forms.Label();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -216,6 +216,19 @@
             this.tableLayoutFilter.Size = new System.Drawing.Size(328, 553);
             this.tableLayoutFilter.TabIndex = 0;
             // 
+            // labelDate
+            // 
+            this.labelDate.AutoSize = true;
+            this.labelDate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelDate.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
+            this.labelDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
+            this.labelDate.Location = new System.Drawing.Point(3, 385);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(322, 55);
+            this.labelDate.TabIndex = 9;
+            this.labelDate.Text = "Дата";
+            this.labelDate.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
             // labelClient
             // 
             this.labelClient.AutoSize = true;
@@ -267,7 +280,6 @@
             this.comboBoxClient.Name = "comboBoxClient";
             this.comboBoxClient.Size = new System.Drawing.Size(322, 50);
             this.comboBoxClient.TabIndex = 3;
-            this.comboBoxClient.DropDown += new System.EventHandler(this.comboBoxClient_OnDropDown);
             // 
             // comboBoxDoctor
             // 
@@ -281,7 +293,6 @@
             this.comboBoxDoctor.Name = "comboBoxDoctor";
             this.comboBoxDoctor.Size = new System.Drawing.Size(322, 50);
             this.comboBoxDoctor.TabIndex = 2;
-            this.comboBoxDoctor.DropDown += new System.EventHandler(this.comboBoxDoctor_OnDropDown);
             // 
             // Search
             // 
@@ -308,7 +319,6 @@
             this.comboBoxService.Name = "comboBoxService";
             this.comboBoxService.Size = new System.Drawing.Size(322, 50);
             this.comboBoxService.TabIndex = 1;
-            this.comboBoxService.DropDown += new System.EventHandler(this.comboBoxService_OnDropDown);
             // 
             // dateTimeApp
             // 
@@ -346,19 +356,6 @@
             this.flowLayoutAppointment.Name = "flowLayoutAppointment";
             this.flowLayoutAppointment.Size = new System.Drawing.Size(771, 553);
             this.flowLayoutAppointment.TabIndex = 1;
-            // 
-            // labelDate
-            // 
-            this.labelDate.AutoSize = true;
-            this.labelDate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelDate.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
-            this.labelDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
-            this.labelDate.Location = new System.Drawing.Point(3, 385);
-            this.labelDate.Name = "labelDate";
-            this.labelDate.Size = new System.Drawing.Size(322, 55);
-            this.labelDate.TabIndex = 9;
-            this.labelDate.Text = "Дата";
-            this.labelDate.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // FormAppointment
             // 

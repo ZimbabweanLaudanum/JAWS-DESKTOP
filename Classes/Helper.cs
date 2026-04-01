@@ -94,7 +94,142 @@ namespace Dentistry_clinic.Classes
             }
             return false;
         }
-        
+
+        /// <summary>
+        /// Функция, открывающая окно навигации
+        /// </summary>
+        /// <param name="form"></param>
+        public static void OpenNavWindow(Form form)
+        {
+            FormNavigation NavForm = new FormNavigation();
+            form.Hide();
+            NavForm.Show();
+        }
+
+        /// <summary>
+        /// Загрузка значений в список
+        /// </summary>
+        public static void Load_comboBox(ComboBox comb, string query, string field)
+        {
+            comb.Items.Clear();
+            using (var connection = Helper.GetConnection())
+            {
+                Helper.OpenCon(connection);
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                comb.Items.Add((string)reader[field]);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No rows found.");
+                        }
+                        reader.Close();
+                    }
+                }
+                Helper.CloseCon(connection);
+            }
+        }
+
+        /// <summary>
+        /// Загрузка значений в список с 1 зависимостью
+        /// </summary>
+        public static void Load_comboBoxOneDepend(ComboBox comb, string query, string field, ComboBox combDep, string param)
+        {
+            comb.Items.Clear();
+
+            string el="";
+
+            if (!(combDep.SelectedItem is null))
+            {
+                el = combDep.SelectedItem.ToString();
+            }
+
+            using (var connection = Helper.GetConnection())
+            {
+                Helper.OpenCon(connection);
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    // Параметры для защиты от SQL-инъекций
+                    command.Parameters.AddWithValue(param, el);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                comb.Items.Add((string)reader[field]);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No rows found.");
+                        }
+                        reader.Close();
+                    }
+                }
+                Helper.CloseCon(connection);
+            }
+        }
+
+        /// <summary>
+        /// Загрузка значений в список с 2 зависимостями
+        /// </summary>
+        public static void Load_comboBoxTwoDepend(ComboBox comb, string query, string field, ComboBox combFirstDep, string firstParam, ComboBox combSecondDep, string secondParam)
+        {
+            comb.Items.Clear();
+
+            string fEl = "";
+            string sEl = "";
+
+            if (!(combFirstDep.SelectedItem is null))
+            {
+                fEl = combFirstDep.SelectedItem.ToString();
+            }
+            if (!(combSecondDep.SelectedItem is null))
+            {
+                sEl = combSecondDep.SelectedItem.ToString();
+            }
+
+            using (var connection = Helper.GetConnection())
+            {
+                Helper.OpenCon(connection);
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    // Параметры для защиты от SQL-инъекций
+                    command.Parameters.AddWithValue(firstParam, fEl);
+                    command.Parameters.AddWithValue(secondParam, sEl);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                comb.Items.Add((string)reader[field]);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No rows found.");
+                        }
+                        reader.Close();
+                    }
+                }
+                Helper.CloseCon(connection);
+            }
+        }
+
         ///string sql = "select ..."
         ///sqldataadapter ad=new sqldataadapter(sql, helper.connection);
         ///datatable dt = new datatable();

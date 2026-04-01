@@ -20,18 +20,22 @@ namespace Dentistry_clinic
     public partial class FormUserCard : Form
     {
         /// <summary>
-        /// Режим работы окна. Всего их 3: 
+        /// Режим работы окна: 
         /// 1 - Просмотр карты пользователя
         /// 2 - Редактирование пользователя
         /// 3 - Создание нового пользователя (регистрация)
         /// 4 - Редактирование пользователем самого себя
         /// </summary>
-        int mode, userId, newRoleId, newSpecId, newClinicId;
+        int mode, userId; 
+        int? newRoleId = 0, newSpecId=0, newClinicId=0;
         string login, newRole, newSpec, newClinic;
-        SqlDateTime? newDate;
+        SqlDateTime? newDate=null;
         string query;
         public static string password;
         string path, selectFile;
+        byte[] img = null;
+        Image image;
+        System.IO.MemoryStream memoryStream;
         bool isSelectPhoto; //Выбрано ли фото
         FileStream file; //файловый поток
 
@@ -51,12 +55,8 @@ namespace Dentistry_clinic
             isSelectPhoto = false;
             this.mode = mode;
             this.login = login;
-            path = Environment.CurrentDirectory + @"\PhotoDoctors\";
-            file = new FileStream(path + "0.png", FileMode.Open);
-            pictureBoxPhoto.Image = Image.FromStream(file);
-            file.Close();
+            LoadDefaultPhoto();
             openFileDialogPhoto.Filter = "Фото (*.png)|*.png";
-
             openFileDialogPhoto.InitialDirectory = path;
         }
 
@@ -69,9 +69,9 @@ namespace Dentistry_clinic
         {
             dateTimeBirth.Format = DateTimePickerFormat.Custom;
             dateTimeBirth.CustomFormat = " ";
-            Load_comboBoxClinic();
-            Load_comboBoxRole();
-            Load_comboBoxSpecialization();
+            Helper.Load_comboBox(comboBoxClinic, "SELECT Clinic_Address FROM Clinic;", "Clinic_Address");
+            Helper.Load_comboBox(comboBoxRole, "SELECT Role_title FROM Role_tab;", "Role_title");
+            Helper.Load_comboBox(comboBoxSpecialization, "SELECT Specialization_name FROM Specialization;", "Specialization_name");
             buttonDelete.Enabled = false;
 
             switch (mode)
@@ -99,7 +99,7 @@ namespace Dentistry_clinic
                     labelWindow.Text = "Регистрация пользователя";
                     buttonAct.Text = "Добавить аккаунт";
                     buttonChangePassword.Text = "Создать пароль";
-                    query = "EXEC Insert_User ";
+                    query = @"EXEC Insert_User ";
                     break;
                 case 4:
                     labelWindow.Text = "Редактирование пользователя";
@@ -134,7 +134,7 @@ namespace Dentistry_clinic
                 {
                     Helper.OpenCon(connection);
 
-                    string query = $"SELECT u.User_id, u.User_email, u.User_password, u.User_fullname, u.User_Phone, u.User_birth_date, u.Role_title_id, r.Role_title, s.Specialization_name, c.Clinic_Address, u.Is_blocked " +
+                    string query = $"SELECT u.User_id, u.User_email, u.User_password, u.User_fullname, u.User_Phone, u.User_birth_date, u.Role_title_id, r.Role_title, s.Specialization_name, c.Clinic_Address, u.Is_blocked, u.User_image " +
                         $"from User_tab u " +
                         $"LEFT JOIN Role_tab r on u.Role_title_id = r.Role_title_id " +
                         $"LEFT JOIN Specialization s on u.Specialization_id = s.Specialization_id " +
@@ -169,13 +169,14 @@ namespace Dentistry_clinic
                                     int role = (Int32)reader["Role_title_id"];
                                     ChangeRole(role);
 
-                                    if (!(reader["Specialization_name"] is DBNull))
+                                    if (!(reader["Specialization_name"] is DBNull)) comboBoxSpecialization.SelectedItem = (string)reader["Specialization_name"];
+
+                                    if (!(reader["Clinic_Address"] is DBNull)) comboBoxClinic.SelectedItem = (string)reader["Clinic_Address"];
+
+                                    if (!(reader["User_image"] is DBNull))
                                     {
-                                        comboBoxSpecialization.SelectedItem = (string)reader["Specialization_name"];
-                                    }
-                                    if (!(reader["Clinic_Address"] is DBNull))
-                                    {
-                                        comboBoxClinic.SelectedItem = (string)reader["Clinic_Address"];
+                                        img = (byte[])reader["User_image"];
+                                        //MessageBox.Show(img.GetValue(0).ToString());
                                     }
                                 }
                             }
@@ -193,11 +194,13 @@ namespace Dentistry_clinic
             {
                 MessageBox.Show(ex.Message);
             }
-            if (File.Exists(path + userId.ToString() + ".png"))
+            if (!(img is null))
             {
-                file = new FileStream(path + userId.ToString() + ".png", FileMode.Open);
-                pictureBoxPhoto.Image = Image.FromStream(file);
-                file.Close();
+                using (memoryStream = new MemoryStream(img))
+                {
+                    image = Image.FromStream(memoryStream);
+                }
+                pictureBoxPhoto.Image = image;
             }
         }
 
@@ -225,105 +228,14 @@ namespace Dentistry_clinic
         }
 
         /// <summary>
-        /// Загрузка значений в список ролей
+        /// Кнопка удаления фото
         /// </summary>
-        private void Load_comboBoxRole()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonDeleteImg_Click(object sender, EventArgs e)
         {
-            this.comboBoxRole.Items.Clear();
-            using (var connection = Helper.GetConnection())
-            {
-                Helper.OpenCon(connection);
-
-                string query = "SELECT Role_title FROM Role_tab;";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                string role = (string)reader["Role_title"];
-                                this.comboBoxRole.Items.Add(role);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("No rows found.");
-                        }
-                        reader.Close();
-                    }
-                }
-                Helper.CloseCon(connection);
-            }
-        }
-
-        /// <summary>
-        /// Загрузка значений в список специализаций
-        /// </summary>
-        private void Load_comboBoxSpecialization()
-        {
-            this.comboBoxSpecialization.Items.Clear();
-            using (var connection = Helper.GetConnection())
-            {
-                Helper.OpenCon(connection);
-
-                string query = "SELECT Specialization_name FROM Specialization;";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                string spec = (string)reader["Specialization_name"];
-                                this.comboBoxSpecialization.Items.Add(spec);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("No rows found.");
-                        }
-                        reader.Close();
-                    }
-                }
-                Helper.CloseCon(connection);
-            }
-        }
-
-        /// <summary>
-        /// Загрузка значений в список клиник
-        /// </summary>
-        private void Load_comboBoxClinic()
-        {
-            this.comboBoxClinic.Items.Clear();
-            using (var connection = Helper.GetConnection())
-            {
-                Helper.OpenCon(connection);
-
-                string query = "SELECT Clinic_Address FROM Clinic;";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                string clinic = (string)reader["Clinic_Address"];
-                                this.comboBoxClinic.Items.Add(clinic);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("No rows found.");
-                        }
-                        reader.Close();
-                    }
-                }
-                Helper.CloseCon(connection);
-            }
+            LoadDefaultPhoto();
+            img = null;
         }
 
         /// <summary>
@@ -333,7 +245,7 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void comboBoxRole_SelectedIndexChanged(object sender, EventArgs e)
         {
-            newRole = comboBoxRole.Text;
+            newRole = comboBoxRole.SelectedItem.ToString();
             using (var connection = Helper.GetConnection())
             {
                 Helper.OpenCon(connection);
@@ -370,7 +282,7 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void comboBoxSpecialization_SelectedIndexChanged(object sender, EventArgs e)
         {
-            newSpec = comboBoxSpecialization.Text;
+            newSpec = comboBoxSpecialization.SelectedItem.ToString();
             using (var connection = Helper.GetConnection())
             {
                 Helper.OpenCon(connection);
@@ -406,7 +318,7 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void comboBoxClinic_SelectedIndexChanged(object sender, EventArgs e)
         {
-            newClinic = comboBoxClinic.Text;
+            newClinic = comboBoxClinic.SelectedItem.ToString();
             using (var connection = Helper.GetConnection())
             {
                 Helper.OpenCon(connection);
@@ -448,6 +360,12 @@ namespace Dentistry_clinic
                 file = new FileStream(selectFile, FileMode.Open);
                 pictureBoxPhoto.Image = Image.FromStream(file);
                 file.Close();
+
+                image = Bitmap.FromFile(selectFile);
+                memoryStream = new System.IO.MemoryStream();
+                image.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                img = memoryStream.ToArray();
+                memoryStream.Close();
                 isSelectPhoto = true;
             }
         }
@@ -509,7 +427,7 @@ namespace Dentistry_clinic
                         return;
                     }
 
-                    queryDel = @"EXEC Update_User @Is_blocked=1, @User_id="+userId+";";
+                    queryDel = @"EXEC Update_User @Is_blocked=1, @User_id=@id;";
                     try
                     {
                         using (var connection = Helper.GetConnection())
@@ -518,6 +436,7 @@ namespace Dentistry_clinic
 
                             using (SqlCommand command = new SqlCommand(queryDel, connection))
                             {
+                                command.Parameters.AddWithValue("@id", userId);
                                 //MessageBox.Show(queryDel);
                                 command.ExecuteNonQuery();
                             }
@@ -541,16 +460,14 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void NavButton_Click(object sender, EventArgs e)
         {
-            FormNavigation NavForm = new FormNavigation();
-            this.Hide();
-            NavForm.Show();
+            Helper.OpenNavWindow(this);
         }
 
         /// <summary>
         /// Функция, для отображение полей в соответствии с выбранной ролью
         /// </summary>
         /// <param name="role"></param>
-        private void ChangeRole(int role)
+        private void ChangeRole(int? role)
         {
             switch (role)
             {
@@ -580,20 +497,27 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void buttonAct_Click(object sender, EventArgs e)
         {
-            if (textBoxFullname.Text != "") query += "@User_fullname = N'" + textBoxFullname.Text + "', ";
-            if (textBoxPhone.Text != "") query += "@User_Phone = '" + textBoxPhone.Text + "', ";
-            if (!(newDate is null)) query += "@User_birth_date = @newDate, ";
-            if (newRoleId != 0) query += "@Role_title_id = " + newRoleId + ", ";
-            if (newSpecId != 0) query += "@Specialization_id = " + newSpecId + ", ";
-            if (newClinicId != 0) query += "@Clinic_id = " + newClinicId + ", ";
+            if (textBoxFullname.Text != "") { query += "@User_fullname = N'" + textBoxFullname.Text + "', "; }
+            else { query += "@User_fullname = " + DBNull.Value + ", "; }
+            if (textBoxPhone.Text != "") { query += "@User_Phone = '" + textBoxPhone.Text + "', "; }
+            else { query += "@User_Phone = " + DBNull.Value + ", "; }
+            if (!(newDate is null)) { query += "@User_birth_date = @newDate, "; }
+            //else if (newDate is null) { query += "@User_birth_date = @newDate, "; }
+            if (newRoleId != 0) { query += "@Role_title_id = " + newRoleId + ", "; }
+            else if (newRoleId is null) { query += "@Role_title_id = " + newRoleId + ", "; }
+            if (newSpecId != 0) { query += "@Specialization_id = " + newSpecId + ", "; }
+            //else if (newSpecId is null) { query += "@Specialization_id = " + newSpecId + ", "; }
+            if (newClinicId != 0) { query += "@Clinic_id = " + newClinicId + ", "; }
+            //else if (newClinicId is null) { query += "@Clinic_id = " + newClinicId + ", "; }
             if (!(password is null)) query += "@InputPassword = N'" + password + "', ";
-            query += "@Login = N'" + textBoxLogin.Text + "';";
-
+            
             if (isSelectPhoto == true)
             {
+                query += "@Image = @Img, ";
                 string newFileName = path + userId.ToString() + ".png";
                 File.Copy(selectFile, newFileName, true);
             }
+            query += "@Login = N'" + textBoxLogin.Text + "';";
 
             switch (mode)
             {
@@ -608,7 +532,10 @@ namespace Dentistry_clinic
 
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
-                                if (!(newDate is null)) command.Parameters.AddWithValue("@newDate", newDate);
+                                if (!(newDate is null)) { command.Parameters.AddWithValue("@newDate", newDate); }
+                                else { }
+
+                                if (!(img is null)) command.Parameters.Add("@Img", SqlDbType.VarBinary).Value = img;
                                 MessageBox.Show(query);
                                 command.ExecuteNonQuery();
                             }
@@ -644,6 +571,18 @@ namespace Dentistry_clinic
                     }
                     break;
             }
+            query = "";
+        }
+
+        /// <summary>
+        /// Загрузка фото по умолчанию
+        /// </summary>
+        private void LoadDefaultPhoto()
+        {
+            path = Environment.CurrentDirectory + @"\PhotoDoctors\";
+            file = new FileStream(path + "0.png", FileMode.Open);
+            pictureBoxPhoto.Image = Image.FromStream(file);
+            file.Close();
         }
     }
 }

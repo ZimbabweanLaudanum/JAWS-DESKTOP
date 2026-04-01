@@ -278,6 +278,7 @@
             this.buttonReport.TabIndex = 5;
             this.buttonReport.Text = "Сформировать отчёт";
             this.buttonReport.UseVisualStyleBackColor = false;
+            this.buttonReport.Click += new System.EventHandler(this.buttonReport_Click);
             // 
             // buttonLoginHistory
             // 

@@ -38,7 +38,6 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void buttonLogIn_Click(object sender, EventArgs e)
         {
-            string password = textBoxPassword.Text;
             try
             {
                 string login = textBoxLogin.Text;
@@ -96,7 +95,7 @@ namespace Dentistry_clinic
                                     return;
                                 }
                                 MessageBox.Show("Добро пожаловать! " + name);
-                                OpenWindow(role);
+                                Helper.OpenNavWindow(this);
                             }
                         }
                     }
@@ -108,17 +107,6 @@ namespace Dentistry_clinic
                 string msg = ex.Message;
                 MessageBox.Show(msg);
             }
-        }
-
-        /// <summary>
-        /// Функция, открывающая окно навигации
-        /// </summary>
-        /// <param name="role"></param>
-        private void OpenWindow(int role)
-        {
-            FormNavigation NavForm = new FormNavigation();
-            this.Hide();
-            NavForm.Show();
         }
     }
 }

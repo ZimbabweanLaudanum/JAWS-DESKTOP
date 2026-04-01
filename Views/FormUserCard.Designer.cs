@@ -64,11 +64,12 @@
             this.tableLayoutLogin = new System.Windows.Forms.TableLayoutPanel();
             this.labelLogin = new System.Windows.Forms.Label();
             this.textBoxLogin = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelImgButt = new System.Windows.Forms.TableLayoutPanel();
             this.buttonAct = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.pictureBoxPhoto = new System.Windows.Forms.PictureBox();
             this.buttonChangePic = new System.Windows.Forms.Button();
+            this.buttonDeleteImg = new System.Windows.Forms.Button();
             this.openFileDialogPhoto = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutTitle.SuspendLayout();
@@ -84,7 +85,7 @@
             this.tableLayoutFullname.SuspendLayout();
             this.tableLayoutPassword.SuspendLayout();
             this.tableLayoutLogin.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanelImgButt.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPhoto)).BeginInit();
             this.SuspendLayout();
             // 
@@ -205,7 +206,7 @@
             this.tableLayoutMainUserCard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.83057F));
             this.tableLayoutMainUserCard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.16943F));
             this.tableLayoutMainUserCard.Controls.Add(this.tableLayoutDataRows, 0, 0);
-            this.tableLayoutMainUserCard.Controls.Add(this.tableLayoutPanel1, 1, 0);
+            this.tableLayoutMainUserCard.Controls.Add(this.tableLayoutPanelImgButt, 1, 0);
             this.tableLayoutMainUserCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutMainUserCard.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             this.tableLayoutMainUserCard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
@@ -549,34 +550,36 @@
             this.textBoxLogin.Size = new System.Drawing.Size(545, 48);
             this.textBoxLogin.TabIndex = 1;
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanelImgButt
             // 
-            this.tableLayoutPanel1.CausesValidation = false;
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.buttonAct, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.buttonDelete, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.pictureBoxPhoto, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonChangePic, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(739, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 81.90255F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18.09745F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(449, 662);
-            this.tableLayoutPanel1.TabIndex = 1;
+            this.tableLayoutPanelImgButt.CausesValidation = false;
+            this.tableLayoutPanelImgButt.ColumnCount = 1;
+            this.tableLayoutPanelImgButt.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelImgButt.Controls.Add(this.buttonAct, 0, 3);
+            this.tableLayoutPanelImgButt.Controls.Add(this.buttonDelete, 0, 4);
+            this.tableLayoutPanelImgButt.Controls.Add(this.pictureBoxPhoto, 0, 0);
+            this.tableLayoutPanelImgButt.Controls.Add(this.buttonChangePic, 0, 1);
+            this.tableLayoutPanelImgButt.Controls.Add(this.buttonDeleteImg, 0, 2);
+            this.tableLayoutPanelImgButt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelImgButt.Location = new System.Drawing.Point(739, 3);
+            this.tableLayoutPanelImgButt.Name = "tableLayoutPanelImgButt";
+            this.tableLayoutPanelImgButt.RowCount = 5;
+            this.tableLayoutPanelImgButt.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.02041F));
+            this.tableLayoutPanelImgButt.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.2449F));
+            this.tableLayoutPanelImgButt.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.2449F));
+            this.tableLayoutPanelImgButt.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.2449F));
+            this.tableLayoutPanelImgButt.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.2449F));
+            this.tableLayoutPanelImgButt.Size = new System.Drawing.Size(449, 662);
+            this.tableLayoutPanelImgButt.TabIndex = 1;
             // 
             // buttonAct
             // 
             this.buttonAct.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.buttonAct.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonAct.ForeColor = System.Drawing.Color.White;
-            this.buttonAct.Location = new System.Drawing.Point(3, 467);
+            this.buttonAct.Location = new System.Drawing.Point(3, 502);
             this.buttonAct.Name = "buttonAct";
-            this.buttonAct.Size = new System.Drawing.Size(443, 78);
+            this.buttonAct.Size = new System.Drawing.Size(443, 75);
             this.buttonAct.TabIndex = 0;
             this.buttonAct.UseVisualStyleBackColor = false;
             this.buttonAct.Click += new System.EventHandler(this.buttonAct_Click);
@@ -586,9 +589,9 @@
             this.buttonDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.buttonDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonDelete.ForeColor = System.Drawing.Color.White;
-            this.buttonDelete.Location = new System.Drawing.Point(3, 551);
+            this.buttonDelete.Location = new System.Drawing.Point(3, 583);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(443, 108);
+            this.buttonDelete.Size = new System.Drawing.Size(443, 76);
             this.buttonDelete.TabIndex = 1;
             this.buttonDelete.Text = "Удалить пользователя";
             this.buttonDelete.UseVisualStyleBackColor = false;
@@ -599,7 +602,7 @@
             this.pictureBoxPhoto.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxPhoto.Location = new System.Drawing.Point(3, 3);
             this.pictureBoxPhoto.Name = "pictureBoxPhoto";
-            this.pictureBoxPhoto.Size = new System.Drawing.Size(443, 374);
+            this.pictureBoxPhoto.Size = new System.Drawing.Size(443, 331);
             this.pictureBoxPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxPhoto.TabIndex = 2;
             this.pictureBoxPhoto.TabStop = false;
@@ -609,13 +612,26 @@
             this.buttonChangePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
             this.buttonChangePic.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonChangePic.ForeColor = System.Drawing.Color.White;
-            this.buttonChangePic.Location = new System.Drawing.Point(3, 383);
+            this.buttonChangePic.Location = new System.Drawing.Point(3, 340);
             this.buttonChangePic.Name = "buttonChangePic";
-            this.buttonChangePic.Size = new System.Drawing.Size(443, 78);
+            this.buttonChangePic.Size = new System.Drawing.Size(443, 75);
             this.buttonChangePic.TabIndex = 3;
             this.buttonChangePic.Text = "Выбрать фото";
             this.buttonChangePic.UseVisualStyleBackColor = false;
             this.buttonChangePic.Click += new System.EventHandler(this.buttonChangePic_Click);
+            // 
+            // buttonDeleteImg
+            // 
+            this.buttonDeleteImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(147)))), ((int)(((byte)(68)))));
+            this.buttonDeleteImg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonDeleteImg.ForeColor = System.Drawing.Color.White;
+            this.buttonDeleteImg.Location = new System.Drawing.Point(3, 421);
+            this.buttonDeleteImg.Name = "buttonDeleteImg";
+            this.buttonDeleteImg.Size = new System.Drawing.Size(443, 75);
+            this.buttonDeleteImg.TabIndex = 4;
+            this.buttonDeleteImg.Text = "Удалить фото";
+            this.buttonDeleteImg.UseVisualStyleBackColor = false;
+            this.buttonDeleteImg.Click += new System.EventHandler(this.buttonDeleteImg_Click);
             // 
             // openFileDialogPhoto
             // 
@@ -658,7 +674,7 @@
             this.tableLayoutPassword.PerformLayout();
             this.tableLayoutLogin.ResumeLayout(false);
             this.tableLayoutLogin.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanelImgButt.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPhoto)).EndInit();
             this.ResumeLayout(false);
 
@@ -700,13 +716,14 @@
         private System.Windows.Forms.Label labelClinic;
         private System.Windows.Forms.ComboBox comboBoxClinic;
         private System.Windows.Forms.DateTimePicker dateTimeBirth;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelImgButt;
         private System.Windows.Forms.Button buttonAct;
         private System.Windows.Forms.Button buttonChangePassword;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.PictureBox pictureBoxPhoto;
         private System.Windows.Forms.Button buttonChangePic;
         private System.Windows.Forms.OpenFileDialog openFileDialogPhoto;
+        private System.Windows.Forms.Button buttonDeleteImg;
     }
 }
 

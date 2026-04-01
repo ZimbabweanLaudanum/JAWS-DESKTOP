@@ -26,21 +26,20 @@ namespace Dentistry_clinic
         public FormCreateAppointment()
         {
             InitializeComponent();
-            comboBoxFullname.KeyPress += (sender, e) => e.Handled = true;
-            comboBoxDoctor.KeyPress += (sender, e) => e.Handled = true;
-            comboBoxService.KeyPress += (sender, e) => e.Handled = true;
-            comboBoxAddress.KeyPress += (sender, e) => e.Handled = true;
+            handleEventOn();
         }
 
+        /// <summary>
+        /// Конструктор с режимом и id записи
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="id"></param>
         public FormCreateAppointment(int mode, int id)
         {
             InitializeComponent();
             this.mode = mode;
             this.id = id;
-            comboBoxFullname.KeyPress += (sender, e) => e.Handled = true;
-            comboBoxDoctor.KeyPress += (sender, e) => e.Handled = true;
-            comboBoxService.KeyPress += (sender, e) => e.Handled = true;
-            comboBoxAddress.KeyPress += (sender, e) => e.Handled = true;
+            handleEventOn();
         }
 
         /// <summary>
@@ -50,6 +49,62 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
+            Helper.Load_comboBox(comboBoxFullname, "SELECT User_fullname FROM User_tab WHERE Role_title_id=4;", "User_fullname");
+            Helper.Load_comboBoxTwoDepend(comboBoxAddress,
+                "SELECT DISTINCT c.Clinic_Address " +
+                "FROM Clinic c " +
+                "LEFT JOIN User_tab doctor on c.Clinic_id = doctor.Clinic_id " +
+                "LEFT JOIN Arrange_Doctor_Services adc on doctor.[User_id]=adc.Doctor_id " +
+                "LEFT JOIN Service s on adc.Service_id=s.Service_id " +
+                "WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') " +
+                "AND (s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') " +
+                "AND ((@DoctorFullname IS NULL AND @ServiceName IS NULL) " +
+                "OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL) " +
+                "OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) " +
+                "OR (@DoctorFullname IS NOT NULL AND @ServiceName IS NOT NULL AND doctor.User_id IS NOT NULL AND s.Service_id IS NOT NULL));",
+                "Clinic_Address",
+                comboBoxService,
+                "@ServiceName",
+                comboBoxDoctor,
+                "@DoctorFullname");
+            Helper.Load_comboBoxTwoDepend(comboBoxService,
+                "SELECT DISTINCT " +
+                "s.Service_name " +
+                "FROM Service s " +
+                "LEFT JOIN Arrange_Doctor_Services ads ON s.Service_id = ads.Service_id " +
+                "LEFT JOIN User_tab doctor ON ads.Doctor_id = doctor.User_id " +
+                "LEFT JOIN Arrange_Clinic_Services acs ON s.Service_id = acs.Service_id " +
+                "LEFT JOIN Clinic c ON acs.Clinic_id = c.Clinic_id " +
+                "WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') " +
+                "AND (c.Clinic_Address = @ClinicAddress OR @ClinicAddress IS NULL OR @ClinicAddress = '') " +
+                "AND ((@DoctorFullname IS NULL AND @ClinicAddress IS NULL) " +
+                "OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL) " +
+                "OR (@ClinicAddress IS NOT NULL AND c.Clinic_id IS NOT NULL) " +
+                "OR (@DoctorFullname IS NOT NULL AND @ClinicAddress IS NOT NULL AND doctor.User_id IS NOT NULL AND c.Clinic_id IS NOT NULL));",
+                "Service_name",
+                comboBoxAddress,
+                "@ClinicAddress",
+                comboBoxDoctor,
+                "@DoctorFullname");
+            Helper.Load_comboBoxTwoDepend(comboBoxDoctor,
+                "SELECT DISTINCT doctor.User_fullname " +
+                "FROM User_tab doctor " +
+                "LEFT JOIN Arrange_Doctor_Services ads ON doctor.User_id=ads.Doctor_id " +
+                "LEFT JOIN Service s ON ads.Service_id=s.Service_id " +
+                "LEFT JOIN Clinic c ON doctor.Clinic_id = c.Clinic_id " +
+                "LEFT JOIN Arrange_Clinic_Services acs ON c.Clinic_id = acs.Clinic_id " +
+                "WHERE ((s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') " +
+                "AND (c.Clinic_Address = @ClinicAddress OR @ClinicAddress IS NULL OR @ClinicAddress = '') " +
+                "AND ((@ServiceName IS NULL AND @ClinicAddress IS NULL) " +
+                "OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) " +
+                "OR (@ClinicAddress IS NOT NULL AND c.Clinic_id IS NOT NULL) " +
+                "OR (@ServiceName IS NOT NULL AND @ClinicAddress IS NOT NULL AND s.Service_id IS NOT NULL AND c.Clinic_id IS NOT NULL))) and (doctor.Role_title_id=1);",
+                "User_fullname",
+                comboBoxAddress,
+                "@ClinicAddress",
+                comboBoxService,
+                "@ServiceName");
+            
             switch (mode)
             {
                 case 1:
@@ -73,10 +128,8 @@ namespace Dentistry_clinic
                                             {
                                                 while (reader.Read())
                                                 {
-                                                    string client = (string)reader["User_fullname"];
-                                                    string phone = (string)reader["User_Phone"];
-                                                    comboBoxFullname.Text = client;
-                                                    textBoxPhone.Text = phone;
+                                                    comboBoxFullname.Text = (string)reader["User_fullname"];
+                                                    textBoxPhone.Text = (string)reader["User_Phone"];
                                                 }
                                             }
                                             else
@@ -97,7 +150,8 @@ namespace Dentistry_clinic
                     }
                     break;
                 case 2:
-                    string sql = $"SELECT a.Appointment_id, client.User_fullname AS Client_name, client.User_phone AS Client_phone, c.Clinic_Address, s.Service_name, doctor.User_fullname AS Doctor_name, a.Visit_date FROM Appointment a INNER JOIN User_tab client ON a.Client_id = client.User_id INNER JOIN Clinic c ON a.Clinic_id = c.Clinic_id INNER JOIN Service s ON a.Service_id = s.Service_id INNER JOIN User_tab doctor ON a.Doctor_id = doctor.User_id where Appointment_id=" + id;
+                    buttonCreate.Text = "Изменить запись";
+                    string sql = "EXEC dbo.Show_App @AppID = " + id;
                     SqlDataAdapter ad = new SqlDataAdapter(sql, Helper.conString);
                     DataTable dt = new DataTable();
                     ad.Fill(dt);
@@ -108,9 +162,6 @@ namespace Dentistry_clinic
                     comboBoxService.SelectedItem = appointment["Service_name"].ToString();
                     comboBoxDoctor.SelectedItem = appointment["Doctor_name"].ToString();
                     dateTimePickerApp.Value = Convert.ToDateTime(appointment["Visit_date"]);
-                    //MessageBox.Show(appointment["Client_name"].ToString());
-                    //DataRow appointment =dt.NewRow();
-                    //client["fullanme"]=textbox.text;
                     break;
             }
         }
@@ -122,219 +173,7 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void NavButton_Click(object sender, EventArgs e)
         {
-            FormNavigation NavForm = new FormNavigation();
-            this.Hide();
-            NavForm.Show();
-        }
-
-        /// <summary>
-        /// Функция для помещения в combobox данных из таблицы Service при открытии элемента
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void comboBoxService_OnDropDown(object sender, EventArgs e)
-        {
-            this.comboBoxService.Items.Clear();
-            string add = "";
-            string doc = "";
-
-            if (comboBoxAddress.Text != "")
-            {
-                add = comboBoxAddress.Text;
-            }
-            if (comboBoxDoctor.Text != "")
-            {
-                doc = comboBoxDoctor.Text;
-            }
-            try
-            {
-                using (var connection = Helper.GetConnection())
-                {
-                    Helper.OpenCon(connection);
-
-                    string query = "SELECT DISTINCT s.Service_name FROM Service s LEFT JOIN Arrange_Doctor_Services ads ON s.Service_id = ads.Service_id LEFT JOIN User_tab doctor ON ads.Doctor_id = doctor.User_id LEFT JOIN Arrange_Clinic_Services acs ON s.Service_id = acs.Service_id LEFT JOIN Clinic c ON acs.Clinic_id = c.Clinic_id WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') AND (c.Clinic_Address = @ClinicAddress OR @ClinicAddress IS NULL OR @ClinicAddress = '')AND ((@DoctorFullname IS NULL AND @ClinicAddress IS NULL) OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL) OR (@ClinicAddress IS NOT NULL AND c.Clinic_id IS NOT NULL) OR (@DoctorFullname IS NOT NULL AND @ClinicAddress IS NOT NULL AND doctor.User_id IS NOT NULL AND c.Clinic_id IS NOT NULL));";
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@DoctorFullname", doc);
-                        command.Parameters.AddWithValue("@ClinicAddress", add);
-
-                        using (var reader = command.ExecuteReader())
-                        {
-                            if (reader.HasRows)
-                            {
-                                while (reader.Read())
-                                {
-                                    string serv = (string)reader["Service_name"];
-                                    this.comboBoxService.Items.Add(serv);
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("No rows found.");
-                            }
-                            reader.Close();
-                        }
-                    }
-                    Helper.CloseCon(connection);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Функция для помещения в combobox данных врачей из таблицы User_tab при открытии элемента
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void comboBoxDoctor_OnDropDown(Object sender, EventArgs e)
-        {
-            this.comboBoxDoctor.Items.Clear();
-            string add = "";
-            string ser = "";
-
-            if (comboBoxAddress.Text != "")
-            {
-                add = comboBoxAddress.Text;
-            }
-            if (comboBoxService.Text != "")
-            {
-                ser = comboBoxService.Text;
-            }
-            try
-            {
-                using (var connection = Helper.GetConnection())
-                {
-                    Helper.OpenCon(connection);
-
-                    string query = "SELECT DISTINCT doctor.User_fullname FROM User_tab doctor LEFT JOIN Arrange_Doctor_Services ads ON doctor.User_id=ads.Doctor_id LEFT JOIN Service s ON ads.Service_id=s.Service_id LEFT JOIN Clinic c ON doctor.Clinic_id = c.Clinic_id LEFT JOIN Arrange_Clinic_Services acs ON c.Clinic_id = acs.Clinic_id WHERE ((s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') AND (c.Clinic_Address = @ClinicAddress OR @ClinicAddress IS NULL OR @ClinicAddress = '') AND ((@ServiceName IS NULL AND @ClinicAddress IS NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) OR (@ClinicAddress IS NOT NULL AND c.Clinic_id IS NOT NULL) OR (@ServiceName IS NOT NULL AND @ClinicAddress IS NOT NULL AND s.Service_id IS NOT NULL AND c.Clinic_id IS NOT NULL))) and (doctor.Role_title_id=1);";
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@ServiceName", ser);
-                        command.Parameters.AddWithValue("@ClinicAddress", add);
-
-                        using (var reader = command.ExecuteReader())
-                        {
-                            if (reader.HasRows)
-                            {
-                                while (reader.Read())
-                                {
-                                    string doc = (string)reader["User_fullname"];
-                                    this.comboBoxDoctor.Items.Add(doc);
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("No rows found.");
-                            }
-                            reader.Close();
-                        }
-                    }
-                    Helper.CloseCon(connection);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Функция для помещения в combobox данных клиентов из таблицы User_tab при открытии элемента
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void comboBoxFullname_OnDropDown(Object sender, EventArgs e)
-        {
-            this.comboBoxFullname.Items.Clear();
-            using (var connection = Helper.GetConnection())
-            {
-                Helper.OpenCon(connection);
-
-                string query = "SELECT User_fullname FROM User_tab where Role_title_id=4;";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                string client = (string)reader["User_fullname"];
-                                this.comboBoxFullname.Items.Add(client);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("No rows found.");
-                        }
-                        reader.Close();
-                    }
-                }
-                Helper.CloseCon(connection);
-            }
-        }
-
-        /// <summary>
-        /// Функция для помещения в combobox данных' таблицы Clinic при открытии элемента
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void comboBoxAddress_OnDropDown(Object sender, EventArgs e)
-        {
-            this.comboBoxAddress.Items.Clear();
-            string doc = "";
-            string ser = "";
-
-            if (comboBoxDoctor.Text != "")
-            {
-                doc = comboBoxDoctor.Text;
-            }
-            if (comboBoxService.Text != "")
-            {
-                ser = comboBoxService.Text;
-            }
-            try
-            {
-                using (var connection = Helper.GetConnection())
-                {
-                    Helper.OpenCon(connection);
-
-                    string query = "SELECT DISTINCT c.Clinic_Address FROM Clinic c LEFT JOIN User_tab doctor on c.Clinic_id=doctor.Clinic_id LEFT JOIN Arrange_Doctor_Services adc on doctor.[User_id]=adc.Doctor_id\r\nLEFT JOIN Service s on adc.Service_id=s.Service_id WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') AND (s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') AND ((@DoctorFullname IS NULL AND @ServiceName IS NULL) OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) OR (@DoctorFullname IS NOT NULL AND @ServiceName IS NOT NULL AND doctor.User_id IS NOT NULL AND s.Service_id IS NOT NULL));";
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@ServiceName", ser);
-                        command.Parameters.AddWithValue("@DoctorFullname", doc);
-
-                        using (var reader = command.ExecuteReader())
-                        {
-                            if (reader.HasRows)
-                            {
-                                while (reader.Read())
-                                {
-                                    string add = (string)reader["Clinic_Address"];
-                                    this.comboBoxAddress.Items.Add(add);
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("No rows found.");
-                            }
-                            reader.Close();
-                        }
-                    }
-                    Helper.CloseCon(connection);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            Helper.OpenNavWindow(this);
         }
 
         /// <summary>
@@ -387,44 +226,44 @@ namespace Dentistry_clinic
                         return;
                     }
 
-                    if (this.comboBoxFullname.Text == "")
+                    if (this.comboBoxFullname.SelectedItem is null)
                     {
                         MessageBox.Show("Выберите клиента");
                         return;
                     }
                     else
                     {
-                        client = comboBoxFullname.Text;
+                        client = comboBoxFullname.SelectedItem.ToString();
                     }
 
-                    if (this.comboBoxAddress.Text == "")
+                    if (this.comboBoxAddress.SelectedItem is null)
                     {
                         MessageBox.Show("Выберите адрес клиники");
                         return;
                     }
                     else
                     {
-                        add = comboBoxAddress.Text;
+                        add = comboBoxAddress.SelectedItem.ToString();
                     }
 
-                    if (this.comboBoxDoctor.Text == "")
+                    if (this.comboBoxDoctor.SelectedItem is null)
                     {
                         MessageBox.Show("Выберите врача");
                         return;
                     }
                     else
                     {
-                        doc = comboBoxDoctor.Text;
+                        doc = comboBoxDoctor.SelectedItem.ToString();
                     }
 
-                    if (this.comboBoxService.Text == "")
+                    if (this.comboBoxService.SelectedItem is null)
                     {
                         MessageBox.Show("Выберите врача");
                         return;
                     }
                     else
                     {
-                        serv = comboBoxService.Text;
+                        serv = comboBoxService.SelectedItem.ToString();
                     }
 
                     date = dateTimePickerApp.Value;
@@ -436,6 +275,132 @@ namespace Dentistry_clinic
                             Helper.OpenCon(connection);
 
                             string query = "INSERT INTO Appointment (Client_id, Clinic_id, Service_id, Doctor_id, Visit_date) SELECT client.User_id, clinic.Clinic_id, service.Service_id, doctor.User_id, @VisitDate FROM (SELECT @ClientFullname AS client_name, @ClinicAddress AS clinic_address, @ServiceName AS service_name, @DoctorName AS doctor_name) AS input LEFT JOIN User_tab client ON client.User_fullname = input.client_name LEFT JOIN Clinic clinic ON clinic.Clinic_Address = input.clinic_address LEFT JOIN Service service ON service.Service_name = input.service_name LEFT JOIN User_tab doctor ON doctor.User_fullname = input.doctor_name WHERE client.User_id IS NOT NULL AND clinic.Clinic_id IS NOT NULL AND service.Service_id IS NOT NULL AND doctor.User_id IS NOT NULL;";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                // Параметры для защиты от SQL-инъекций
+                                command.Parameters.AddWithValue("@ClientFullname", client);
+                                command.Parameters.AddWithValue("@ClinicAddress", add);
+                                command.Parameters.AddWithValue("@ServiceName", serv);
+                                command.Parameters.AddWithValue("@DoctorName", doc);
+                                command.Parameters.AddWithValue("@VisitDate", date);
+                                int rows = command.ExecuteNonQuery();
+                            }
+                            Helper.CloseCon(connection);
+                        }
+                        MessageBox.Show("Запись успешно создана.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                    break;
+                case 2:
+                    if (this.textBoxPhone.Text is null)
+                    {
+                        MessageBox.Show("Заполните поле Номер телефона");
+                        return;
+                    }
+                    else
+                    {
+                        phone = textBoxPhone.Text;
+                    }
+                    try
+                    {
+                        using (var connection = Helper.GetConnection())
+                        {
+                            Helper.OpenCon(connection);
+
+                            string query = "UPDATE u SET u.User_Phone = @NewPhoneNumber FROM User_tab u WHERE u.User_email = @UserEmail AND (u.User_Phone != @NewPhoneNumber OR u.User_Phone IS NULL);";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                // Параметры для защиты от SQL-инъекций
+                                command.Parameters.AddWithValue("@NewPhoneNumber", phone);
+                                command.Parameters.AddWithValue("@UserEmail", Helper.login);
+
+                                command.BeginExecuteNonQuery();
+                            }
+                            Helper.CloseCon(connection);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+
+                    if (this.comboBoxFullname.SelectedItem is null)
+                    {
+                        MessageBox.Show("Выберите клиента");
+                        return;
+                    }
+                    else
+                    {
+                        client = comboBoxFullname.SelectedItem.ToString();
+                    }
+
+                    if (this.comboBoxAddress.SelectedItem is null)
+                    {
+                        MessageBox.Show("Выберите адрес клиники");
+                        return;
+                    }
+                    else
+                    {
+                        add = comboBoxAddress.SelectedItem.ToString();
+                    }
+
+                    if (this.comboBoxDoctor.SelectedItem is null)
+                    {
+                        MessageBox.Show("Выберите врача");
+                        return;
+                    }
+                    else
+                    {
+                        doc = comboBoxDoctor.SelectedItem.ToString();
+                    }
+
+                    if (this.comboBoxService.SelectedItem is null)
+                    {
+                        MessageBox.Show("Выберите врача");
+                        return;
+                    }
+                    else
+                    {
+                        serv = comboBoxService.SelectedItem.ToString();
+                    }
+
+                    date = dateTimePickerApp.Value;
+
+                    try
+                    {
+                        using (var connection = Helper.GetConnection())
+                        {
+                            Helper.OpenCon(connection);
+
+                            string query = "UPDATE Appointment SET " +
+                                "Client_id = , " +
+                                "Clinic_id = , " +
+                                "Service_id = , " +
+                                "Doctor_id = , " +
+                                "Visit_date =  " +
+                                "SELECT client.User_id, " +
+                                "clinic.Clinic_id, " +
+                                "service.Service_id, " +
+                                "doctor.User_id, " +
+                                "@VisitDate " +
+                                "   FROM (SELECT @ClientFullname AS client_name, " +
+                                "   @ClinicAddress AS clinic_address, " +
+                                "   @ServiceName AS service_name, " +
+                                "   @DoctorName AS doctor_name) " +
+                                "AS input " +
+                                "LEFT JOIN User_tab client ON client.User_fullname = input.client_name " +
+                                "LEFT JOIN Clinic clinic ON clinic.Clinic_Address = input.clinic_address " +
+                                "LEFT JOIN Service service ON service.Service_name = input.service_name " +
+                                "LEFT JOIN User_tab doctor ON doctor.User_fullname = input.doctor_name " +
+                                "WHERE client.User_id IS NOT NULL " +
+                                "AND clinic.Clinic_id IS NOT NULL " +
+                                "AND service.Service_id IS NOT NULL " +
+                                "AND doctor.User_id IS NOT NULL;";
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
                                 // Параметры для защиты от SQL-инъекций
@@ -485,8 +450,7 @@ namespace Dentistry_clinic
                             {
                                 while (reader.Read())
                                 {
-                                    string phone = (string)reader["User_Phone"];
-                                    this.textBoxPhone.Text = phone;
+                                    this.textBoxPhone.Text = (string)reader["User_Phone"];
                                 }
                             }
                             else
@@ -495,7 +459,6 @@ namespace Dentistry_clinic
                             }
                             reader.Close();
                         }
-
                     }
                     Helper.CloseCon(connection);
                 }
@@ -507,6 +470,15 @@ namespace Dentistry_clinic
             }
         }
 
-
+        /// <summary>
+        /// Функция для обработки событий
+        /// </summary>
+        private void handleEventOn()
+        {
+            comboBoxFullname.KeyPress += (sender, e) => e.Handled = true;
+            comboBoxDoctor.KeyPress += (sender, e) => e.Handled = true;
+            comboBoxService.KeyPress += (sender, e) => e.Handled = true;
+            comboBoxAddress.KeyPress += (sender, e) => e.Handled = true;
+        }
     }
 }
