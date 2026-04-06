@@ -293,6 +293,7 @@
             this.comboBoxDoctor.Name = "comboBoxDoctor";
             this.comboBoxDoctor.Size = new System.Drawing.Size(322, 50);
             this.comboBoxDoctor.TabIndex = 2;
+            this.comboBoxDoctor.DropDown += new System.EventHandler(this.comboBoxDoctor_DropDown);
             // 
             // Search
             // 
@@ -319,6 +320,7 @@
             this.comboBoxService.Name = "comboBoxService";
             this.comboBoxService.Size = new System.Drawing.Size(322, 50);
             this.comboBoxService.TabIndex = 1;
+            this.comboBoxService.DropDown += new System.EventHandler(this.comboBoxService_DropDown);
             // 
             // dateTimeApp
             // 

@@ -46,81 +46,7 @@ namespace Dentistry_clinic
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            dateTimeApp.Format = DateTimePickerFormat.Custom;
-            dateTimeApp.CustomFormat = " ";
-            Helper.Load_comboBox(comboBoxClient, "SELECT User_fullname FROM User_tab where Role_title_id=4;", "User_fullname");
-            Helper.Load_comboBoxOneDepend(comboBoxService, "SELECT DISTINCT s.Service_name FROM Service s LEFT JOIN Arrange_Doctor_Services ads ON s.Service_id = ads.Service_id LEFT JOIN User_tab doctor ON ads.Doctor_id = doctor.User_id WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') AND ((@DoctorFullname IS NULL) OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL));", "Service_name", comboBoxDoctor, "@DoctorFullname");
-            Helper.Load_comboBoxOneDepend(comboBoxDoctor, "SELECT DISTINCT doctor.User_fullname FROM User_tab doctor LEFT JOIN Arrange_Doctor_Services ads ON doctor.User_id=ads.Doctor_id LEFT JOIN Service s ON ads.Service_id=s.Service_id WHERE ((s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') AND ((@ServiceName IS NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL))) and (doctor.Role_title_id=1);", "User_fullname", comboBoxService, "@ServiceName");
-
-            switch (Helper.role)
-            {
-                case 1:
-                    this.comboBoxDoctor.SelectedItem = selectUserName();
-                    this.comboBoxDoctor.Hide();
-                    this.tableLayoutFilter.RowStyles[3].SizeType = SizeType.Absolute;
-                    this.tableLayoutFilter.RowStyles[3].Height = 0;
-                    this.tableLayoutFilter.RowStyles[4].SizeType = SizeType.Absolute;
-                    this.tableLayoutFilter.RowStyles[4].Height = 0;
-                    break;
-                case 4:
-                    this.comboBoxClient.SelectedItem = selectUserName();
-                    this.comboBoxClient.Hide();
-                    this.tableLayoutFilter.RowStyles[5].SizeType = SizeType.Absolute;
-                    this.tableLayoutFilter.RowStyles[5].Height = 0;
-                    this.tableLayoutFilter.RowStyles[6].SizeType = SizeType.Absolute;
-                    this.tableLayoutFilter.RowStyles[6].Height = 0;
-                    break;
-            }
-            try
-            {
-                using (var connection = Helper.GetConnection())
-                {
-                    Helper.OpenCon(connection);
-
-                    string query = $"EXEC dbo.Show_App";
-                    switch (Helper.role)
-                    {
-                        case (1):
-                            query += " @DoctorLogin = @login;";
-                            break;
-                        case (4):
-                            query += " @ClientLogin = @login;";
-                            break;
-                    }
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@login", Helper.login);
-                        using (var reader = command.ExecuteReader())
-                        {
-                            if (reader.HasRows)
-                            {
-                                while (reader.Read())
-                                {
-                                    int id = (Int32)reader["Appointment_id"];
-                                    string client = (string)reader["Client_name"];
-                                    string clinic = (string)reader["Clinic_Address"];
-                                    string service = (string)reader["Service_name"];
-                                    decimal service_cost = (decimal)reader["Service_cost"];
-                                    string doctor = (string)reader["Doctor_name"];
-                                    DateTime date = (DateTime)reader["Visit_date"];
-                                    CreateCard(id, client, doctor, service, service_cost, clinic, date);
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("No rows found.");
-                            }
-                            reader.Close();
-                        }
-                    }
-                    Helper.CloseCon(connection);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            loadData();
         }
 
         /// <summary>
@@ -352,6 +278,18 @@ namespace Dentistry_clinic
         /// <param name="id"></param>
         private void delButton_Click(object sender, EventArgs e)
         {
+            string message = "Вы уверены, что хотите удалить запись?";
+            string caption = "Удаление записи";
+            var result = MessageBox.Show(message, caption,
+                                 MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question);
+
+            // Если нажата кнопка 'нет' - отменяет выполнение функции.
+            if (result == DialogResult.No)
+            {
+                return;
+            }
+
             System.Windows.Forms.Button btn = (System.Windows.Forms.Button)sender;
             int data = Convert.ToInt32(btn.Tag);
             delCard(data);
@@ -376,21 +314,17 @@ namespace Dentistry_clinic
         {
             this.flowLayoutAppointment.Controls.Clear();
             if (this.comboBoxClient.SelectedItem != null)
-            {
                 client = this.comboBoxClient.Text;
-            }
+            
             if (this.comboBoxDoctor.SelectedItem != null)
-            {
                 doc = this.comboBoxDoctor.Text;
-            }
+            
             if (this.comboBoxService.SelectedItem != null)
-            {
                 serv = this.comboBoxService.Text;
-            }
-            if (this.dateTimeApp.CustomFormat != " ")
-            {
+            
+            //if (this.dateTimeApp.CustomFormat != " ")
                 dat = this.dateTimeApp.Value.Date;
-            }
+            
 
             try
             {
@@ -398,46 +332,17 @@ namespace Dentistry_clinic
                 {
                     Helper.OpenCon(connection);
 
-                    string query = @"SELECT 
-                        a.Appointment_id
-                        client.User_fullname AS Client_name, 
-                        c.Clinic_Address, 
-                        s.Service_name, 
-                        s.Service_cost, 
-                        doctor.User_fullname AS Doctor_name, 
-                        a.Visit_date 
-                    FROM Appointment a 
-                        INNER JOIN User_tab client ON a.Client_id = client.User_id 
-                        INNER JOIN Clinic c ON a.Clinic_id = c.Clinic_id 
-                        INNER JOIN Service s ON a.Service_id = s.Service_id 
-                        INNER JOIN User_tab doctor ON a.Doctor_id = doctor.User_id 
-                    WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') 
-                        AND (s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') 
-                        AND (client.User_fullname = @ClientName OR @ClientName IS NULL OR @ClientName = '') 
-                        AND (a.Visit_date = @Date OR @Date IS NULL OR @Date = '') 
-                        AND ((@DoctorFullname IS NULL AND @ServiceName IS NULL AND @ClientName is null and @Date is null) 
-                            OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL) 
-                            OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) 
-                            OR (@ClientName IS NOT NULL AND client.User_fullname IS NOT NULL) 
-                            OR (@Date IS NOT NULL AND a.Visit_date IS NOT NULL) 
-                            OR (@DoctorFullname IS NOT NULL AND @ServiceName IS NOT NULL and @ClientName is not null and @Date is not null AND doctor.User_id IS NOT NULL AND s.Service_id IS NOT NULL and client.User_fullname is not null and a.Visit_date is not null) 
-                            or (@DoctorFullname IS NULL AND @ServiceName IS NOT NULL and @ClientName is not null and @Date is not null AND doctor.User_id IS NULL AND s.Service_id IS NOT NULL and client.User_fullname is not null and a.Visit_date is not null) 
-                            or (@DoctorFullname IS NOT NULL AND @ServiceName IS NULL and @ClientName is not null and @Date is not null AND doctor.User_id IS NOT NULL AND s.Service_id IS NULL and client.User_fullname is not null and a.Visit_date is not null) 
-                            or (@DoctorFullname IS NOT NULL AND @ServiceName IS NOT NULL and @ClientName is null and @Date is not null AND doctor.User_id IS NOT NULL AND s.Service_id IS NOT NULL and client.User_fullname is null and a.Visit_date is not null) 
-                            OR (@DoctorFullname IS NULL AND @ServiceName IS NOT NULL and @ClientName is null and @Date is not null AND doctor.User_id IS NULL AND s.Service_id IS NOT NULL and client.User_fullname is null and a.Visit_date is not null) 
-                            OR (@DoctorFullname IS NOT NULL AND @ServiceName IS NULL and @ClientName is not null and @Date is null AND doctor.User_id IS NOT NULL AND s.Service_id IS NULL and client.User_fullname is not null and a.Visit_date is null) 
-                            OR (@DoctorFullname IS NULL AND @ServiceName IS NOT NULL and @ClientName is not null and @Date is null AND doctor.User_id IS NULL AND s.Service_id IS NOT NULL and client.User_fullname is not null and a.Visit_date is null) 
-                            OR (@DoctorFullname IS NOT NULL AND @ServiceName IS NULL and @ClientName is null and @Date is not null AND doctor.User_id IS NOT NULL AND s.Service_id IS NULL and client.User_fullname is null and a.Visit_date is not null));";
+                    string query = @"EXEC dbo.Show_App @ClientName=@ClientFullname, @ServiceName=@ServName, @DoctorFullname=@DocName, @Date=@Dat;";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         // Параметры для защиты от SQL-инъекций
-                        command.Parameters.AddWithValue("@ClientName", client);
-                        command.Parameters.AddWithValue("@ServiceName", serv);
-                        command.Parameters.AddWithValue("@DoctorFullname", doc);
+                        command.Parameters.AddWithValue("@ClientFullname", client);
+                        command.Parameters.AddWithValue("@ServName", serv);
+                        command.Parameters.AddWithValue("@DocName", doc);
                         //if(!(dat is null))
-                        command.Parameters.AddWithValue("@Date", dat);
+                        command.Parameters.AddWithValue("@Dat", dat);
 
-                        //MessageBox.Show(dat.ToString());
+                        //MessageBox.Show(command.ToString());
 
                         using (var reader = command.ExecuteReader())
                         {
@@ -555,7 +460,7 @@ namespace Dentistry_clinic
             {
                 return;
             }
-            MessageBox.Show(str);
+            //MessageBox.Show(str);
             string[] arr = str.Split('!');
             createAgreement(arr);
         }
@@ -566,7 +471,28 @@ namespace Dentistry_clinic
         /// <param name="id"></param>
         private void delCard(int id)
         {
+            try
+            {
+                using (var connection = Helper.GetConnection())
+                {
+                    Helper.OpenCon(connection);
 
+                    string query = "DELETE FROM Appointment where Appointment_id=@id";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Параметры для защиты от SQL-инъекций
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                        MessageBox.Show("Запись успешно удалена");
+                        loadData();
+                    }
+                    Helper.CloseCon(connection);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -582,58 +508,183 @@ namespace Dentistry_clinic
             }
             catch
             {
-                MessageBox.Show("Ошибка");
+                MessageBox.Show("Ошибка при открытии приложения");
                 return;
             }
 
-            //2 подготовка документа
-
-            string path = Environment.CurrentDirectory;
-            string filetemp = path + @"\Templates\templatebookmarks.docx";
-            if (File.Exists(filetemp))
+            try
             {
-                wordDoc = wordApp.Documents.Add(filetemp);
-                wordDoc.Save();
-                wordDoc.Activate();
+                //2 подготовка документа
+                string path = Environment.CurrentDirectory;
+                string filetemp = path + @"\Templates\templatebookmarks.docx";
+                if (File.Exists(filetemp))
+                {
+                    wordDoc = wordApp.Documents.Add(filetemp);
+                    wordDoc.Save();
+                    wordDoc.Activate();
+                }
+                else
+                {
+                    MessageBox.Show("Шаблон не найден");
+                    return;
+                }
+
+                //3 добавление закладок
+                bookmarks = wordDoc.Bookmarks;
+                //0id 1client 2doctor 3service 4service_cost 5clinic 6date
+                //foreach(string str in arr)
+                //{
+                //    MessageBox.Show(str);
+                //}
+                //4 заполнение закладок
+                bookmarks["id"].Range.Text = arr[0];
+                bookmarks["date"].Range.Text = DateTime.Now.ToShortDateString();
+                bookmarks["address"].Range.Text = arr[5];
+                bookmarks["client"].Range.Text = arr[1];
+                bookmarks["service"].Range.Text = arr[3];
+                bookmarks["cost"].Range.Text = arr[4];
+                bookmarks["doctor"].Range.Text = arr[2];
+                bookmarks["appdate"].Range.Text = arr[6];
+                bookmarks["appaddress"].Range.Text = arr[5];
+                bookmarks["admin"].Range.Text = selectUserName();
+                bookmarks["appclient"].Range.Text = arr[1];
+
+                ////5 сохранение документа
+                string newpath = path + @"\Documents\";
+                wordDoc.SaveAs2(newpath + "AgrFrom" + arr[0].ToString() +".docx");
+                wordDoc.SaveAs2(newpath + "AgrFrom" + arr[0].ToString() +".pdf", Word.WdExportFormat.wdExportFormatPDF);
+                wordDoc.Close(true, null, null);
+
+                //6 закрытие ворда
+                wordApp.Quit();
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(wordApp);
+                wordApp = null;
+                GC.Collect();
+                MessageBox.Show("Успешно");
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Шаблон не найден");
-                return;
+                MessageBox.Show(ex.Message);
             }
+        }
 
-            //3 добавление закладок
-            bookmarks = wordDoc.Bookmarks;
-            //0id 1client 2doctor 3service 4service_cost 5clinic 6date
-            //foreach(string str in arr)
-            //{
-            //    MessageBox.Show(str);
-            //}
-            //4 заполнение закладок
-            bookmarks["id"].Range.Text = arr[0];
-            bookmarks["date"].Range.Text = DateTime.Now.ToShortDateString();
-            bookmarks["address"].Range.Text = arr[5];
-            bookmarks["client"].Range.Text = arr[1];
-            bookmarks["service"].Range.Text =arr[3];
-            bookmarks["cost"].Range.Text = arr[4];
-            bookmarks["doctor"].Range.Text = arr[2];
-            bookmarks["appdate"].Range.Text = arr[6];
-            bookmarks["appaddress"].Range.Text = arr[5];
-            bookmarks["admin"].Range.Text = selectUserName();
-            bookmarks["appclient"].Range.Text = arr[1];
+        /// <summary>
+        /// Загрузка данных из базы
+        /// </summary>
+        private void loadData()
+        {
+            flowLayoutAppointment.Controls.Clear();
+            dateTimeApp.Format = DateTimePickerFormat.Custom;
+            dateTimeApp.CustomFormat = " ";
+            Helper.Load_comboBox(comboBoxClient, "SELECT User_fullname FROM User_tab where Role_title_id=4;", "User_fullname");
+            Helper.Load_comboBoxOneDepend(comboBoxService, 
+                "SELECT DISTINCT s.Service_name FROM Service s LEFT JOIN Arrange_Doctor_Services ads ON s.Service_id = ads.Service_id LEFT JOIN User_tab doctor ON ads.Doctor_id = doctor.User_id WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') AND ((@DoctorFullname IS NULL) OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL));", 
+                "Service_name", 
+                comboBoxDoctor, 
+                "@DoctorFullname");
+            Helper.Load_comboBoxOneDepend(comboBoxDoctor, 
+                "SELECT DISTINCT doctor.User_fullname FROM User_tab doctor LEFT JOIN Arrange_Doctor_Services ads ON doctor.User_id=ads.Doctor_id LEFT JOIN Service s ON ads.Service_id=s.Service_id WHERE ((s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') AND ((@ServiceName IS NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL))) and (doctor.Role_title_id=1);", 
+                "User_fullname", 
+                comboBoxService, 
+                "@ServiceName");
 
-            ////5 сохранение документа
-            string newpath = path + @"\Documents\";
-            wordDoc.SaveAs2(newpath + "AgrFrom.docx");
-            wordDoc.SaveAs2(newpath + "AgrFrom.pdf", Word.WdExportFormat.wdExportFormatPDF);
-            wordDoc.Close(true, null, null);
+            switch (Helper.role)
+            {
+                case 1:
+                    this.comboBoxDoctor.SelectedItem = selectUserName();
+                    this.comboBoxDoctor.Hide();
+                    this.tableLayoutFilter.RowStyles[3].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[3].Height = 0;
+                    this.tableLayoutFilter.RowStyles[4].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[4].Height = 0;
+                    break;
+                case 4:
+                    this.comboBoxClient.SelectedItem = selectUserName();
+                    this.comboBoxClient.Hide();
+                    this.tableLayoutFilter.RowStyles[5].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[5].Height = 0;
+                    this.tableLayoutFilter.RowStyles[6].SizeType = SizeType.Absolute;
+                    this.tableLayoutFilter.RowStyles[6].Height = 0;
+                    break;
+            }
+            try
+            {
+                using (var connection = Helper.GetConnection())
+                {
+                    Helper.OpenCon(connection);
 
-            //6 закрытие ворда
-            wordApp.Quit();
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(wordApp);
-            wordApp = null;
-            GC.Collect();
-            MessageBox.Show("Успешно");
+                    string query = $"EXEC dbo.Show_App";
+                    switch (Helper.role)
+                    {
+                        case (1):
+                            query += " @DoctorLogin = @login;";
+                            break;
+                        case (4):
+                            query += " @ClientLogin = @login;";
+                            break;
+                    }
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Параметры для защиты от SQL-инъекций
+                        command.Parameters.AddWithValue("@login", Helper.login);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    int id = (Int32)reader["Appointment_id"];
+                                    string client = (string)reader["Client_name"];
+                                    string clinic = (string)reader["Clinic_Address"];
+                                    string service = (string)reader["Service_name"];
+                                    decimal service_cost = (decimal)reader["Service_cost"];
+                                    string doctor = (string)reader["Doctor_name"];
+                                    DateTime date = (DateTime)reader["Visit_date"];
+                                    CreateCard(id, client, doctor, service, service_cost, clinic, date);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("No rows found.");
+                            }
+                            reader.Close();
+                        }
+                    }
+                    Helper.CloseCon(connection);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Загрузка списка услуг
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxService_DropDown(object sender, EventArgs e)
+        {
+            Helper.Load_comboBoxOneDepend(comboBoxService,
+                "SELECT DISTINCT s.Service_name FROM Service s LEFT JOIN Arrange_Doctor_Services ads ON s.Service_id = ads.Service_id LEFT JOIN User_tab doctor ON ads.Doctor_id = doctor.User_id WHERE (doctor.User_fullname = @DoctorFullname OR @DoctorFullname IS NULL OR @DoctorFullname = '') AND ((@DoctorFullname IS NULL) OR (@DoctorFullname IS NOT NULL AND doctor.User_id IS NOT NULL));",
+                "Service_name",
+                comboBoxDoctor,
+                "@DoctorFullname");
+        }
+
+        /// <summary>
+        /// За
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxDoctor_DropDown(object sender, EventArgs e)
+        {
+            Helper.Load_comboBoxOneDepend(comboBoxDoctor,
+                "SELECT DISTINCT doctor.User_fullname FROM User_tab doctor LEFT JOIN Arrange_Doctor_Services ads ON doctor.User_id=ads.Doctor_id LEFT JOIN Service s ON ads.Service_id=s.Service_id WHERE ((s.Service_name = @ServiceName OR @ServiceName IS NULL OR @ServiceName = '') AND ((@ServiceName IS NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL) OR (@ServiceName IS NOT NULL AND s.Service_id IS NOT NULL))) and (doctor.Role_title_id=1);",
+                "User_fullname",
+                comboBoxService,
+                "@ServiceName");
         }
     }
 }

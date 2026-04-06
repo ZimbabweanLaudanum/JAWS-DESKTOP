@@ -201,6 +201,7 @@ namespace Dentistry_clinic
                     image = Image.FromStream(memoryStream);
                 }
                 pictureBoxPhoto.Image = image;
+                isSelectPhoto = true;
             }
         }
 
@@ -498,13 +499,13 @@ namespace Dentistry_clinic
         private void buttonAct_Click(object sender, EventArgs e)
         {
             if (textBoxFullname.Text != "") { query += "@User_fullname = N'" + textBoxFullname.Text + "', "; }
-            else { query += "@User_fullname = " + DBNull.Value + ", "; }
+            //else { query += "@User_fullname = " + DBNull.Value + ", "; }
             if (textBoxPhone.Text != "") { query += "@User_Phone = '" + textBoxPhone.Text + "', "; }
-            else { query += "@User_Phone = " + DBNull.Value + ", "; }
+            //else { query += "@User_Phone = " + DBNull.Value + ", "; }
             if (!(newDate is null)) { query += "@User_birth_date = @newDate, "; }
             //else if (newDate is null) { query += "@User_birth_date = @newDate, "; }
             if (newRoleId != 0) { query += "@Role_title_id = " + newRoleId + ", "; }
-            else if (newRoleId is null) { query += "@Role_title_id = " + newRoleId + ", "; }
+            //else if (newRoleId is null) { query += "@Role_title_id = " + newRoleId + ", "; }
             if (newSpecId != 0) { query += "@Specialization_id = " + newSpecId + ", "; }
             //else if (newSpecId is null) { query += "@Specialization_id = " + newSpecId + ", "; }
             if (newClinicId != 0) { query += "@Clinic_id = " + newClinicId + ", "; }
@@ -536,7 +537,7 @@ namespace Dentistry_clinic
                                 else { }
 
                                 if (!(img is null)) command.Parameters.Add("@Img", SqlDbType.VarBinary).Value = img;
-                                MessageBox.Show(query);
+                                //MessageBox.Show(query);
                                 command.ExecuteNonQuery();
                             }
                             Helper.CloseCon(connection);

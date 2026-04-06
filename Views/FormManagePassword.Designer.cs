@@ -275,7 +275,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(820, 420);
             this.Name = "FormManagePassword";
-            this.Text = "Form1";
+            this.Text = "Управление паролем";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.tableLayoutTitle.ResumeLayout(false);

@@ -34,7 +34,6 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
@@ -201,19 +200,23 @@
             // 
             chartArea1.Name = "ChartArea1";
             this.chartClinic.ChartAreas.Add(chartArea1);
+            this.chartClinic.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Font = new System.Drawing.Font("Arial Narrow", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            legend1.IsTextAutoFit = false;
             legend1.Name = "Legend1";
             this.chartClinic.Legends.Add(legend1);
-            this.chartClinic.Location = new System.Drawing.Point(68, 46);
+            this.chartClinic.Location = new System.Drawing.Point(3, 3);
             this.chartClinic.Name = "chartClinic";
             this.chartClinic.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
             series1.IsValueShownAsLabel = true;
             series1.LabelForeColor = System.Drawing.Color.White;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartClinic.Series.Add(series1);
-            this.chartClinic.Size = new System.Drawing.Size(795, 300);
+            this.chartClinic.Size = new System.Drawing.Size(1013, 423);
             this.chartClinic.TabIndex = 0;
             this.chartClinic.Text = "chart1";
             title1.Font = new System.Drawing.Font("Arial Narrow", 26.25F);
@@ -236,17 +239,15 @@
             // 
             chartArea2.Name = "ChartArea1";
             this.chartMon.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chartMon.Legends.Add(legend2);
-            this.chartMon.Location = new System.Drawing.Point(54, 64);
+            this.chartMon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartMon.Location = new System.Drawing.Point(3, 3);
             this.chartMon.Name = "chartMon";
             series2.ChartArea = "ChartArea1";
             series2.Color = System.Drawing.Color.Lime;
             series2.IsValueShownAsLabel = true;
-            series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chartMon.Series.Add(series2);
-            this.chartMon.Size = new System.Drawing.Size(923, 300);
+            this.chartMon.Size = new System.Drawing.Size(1013, 423);
             this.chartMon.TabIndex = 1;
             this.chartMon.Text = "chart1";
             title2.Font = new System.Drawing.Font("Arial Narrow", 26.25F);

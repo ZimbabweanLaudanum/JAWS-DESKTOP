@@ -247,6 +247,7 @@
             this.comboBoxDoctor.Name = "comboBoxDoctor";
             this.comboBoxDoctor.Size = new System.Drawing.Size(486, 41);
             this.comboBoxDoctor.TabIndex = 11;
+            this.comboBoxDoctor.DropDown += new System.EventHandler(this.comboBoxDoctor_DropDown);
             // 
             // labelDoctor
             // 
@@ -271,6 +272,7 @@
             this.comboBoxService.Name = "comboBoxService";
             this.comboBoxService.Size = new System.Drawing.Size(486, 41);
             this.comboBoxService.TabIndex = 9;
+            this.comboBoxService.DropDown += new System.EventHandler(this.comboBoxService_DropDown);
             // 
             // labelService
             // 
@@ -339,6 +341,7 @@
             this.comboBoxAddress.Name = "comboBoxAddress";
             this.comboBoxAddress.Size = new System.Drawing.Size(486, 41);
             this.comboBoxAddress.TabIndex = 7;
+            this.comboBoxAddress.DropDown += new System.EventHandler(this.comboBoxAddress_DropDown);
             // 
             // dateTimePickerApp
             // 
